@@ -7,8 +7,8 @@
             </a>
         </div>
         <div class="header-nav">
-            <a href="javascript://" class="active nav-link nav-text">Dashboard</a>
-            <a href="javascript://" class="nav-link nav-text">Interactive Analytics</a>
+            <a href="javascript://" class="active nav-link nav-text">Curso 01</a>
+            <a href="javascript://" class="nav-link nav-text">Curso 02</a>
         </div>
         <div class="header-actions">
             <a href="javascript://" class="nav-link nav-icon">
@@ -24,7 +24,16 @@
     </header>
     <div class="content-container">
         <div class="content-area">
-            ...
+            <div class="clr-row">
+                <div class="clr-col-4">
+                    <span>4</span>
+                </div>
+                <div class="clr-col-8">
+                    {{texto}}
+                    <quill-editor [modules]="configuracionTexto" format="html" [(ngModel)]="texto" [placeholder]="texto"></quill-editor>
+                    <button class="btn btn-primary">Generar</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
