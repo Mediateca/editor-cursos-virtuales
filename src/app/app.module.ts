@@ -5,6 +5,7 @@ import { ClarityModule } from '@clr/angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { QuillModule } from 'ngx-quill';
+import { DragulaModule } from 'ng2-dragula';
 
 @NgModule({
     declarations: [
@@ -15,7 +16,8 @@ import { QuillModule } from 'ngx-quill';
         ClarityModule,
         BrowserAnimationsModule,
         FormsModule,
-        QuillModule
+        QuillModule,
+        DragulaModule.forRoot()
     ],
     providers: [],
     bootstrap: [AppComponent]

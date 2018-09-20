@@ -26,13 +26,36 @@
         <div class="content-area">
             <div class="clr-row">
                 <div class="clr-col-4">
-                    <span>4</span>
+
+
+
+                    <div class="dragable-container" dragula="LISTADO" [(dragulaModel)]="listado">
+                        <clr-tree-node class="clr-row dragable" *ngFor="let lista of listado; index as i; first as inicial">
+                            <clr-icon [attr.shape]="'home'"></clr-icon>
+                            {{lista.texto}}
+                        </clr-tree-node>
+                    </div>
+
+
                 </div>
                 <div class="clr-col-8">
                     {{texto}}
                     <quill-editor [modules]="configuracionTexto" format="html" [(ngModel)]="texto" [placeholder]="texto"></quill-editor>
                     <button class="btn btn-primary">Generar</button>
                 </div>
+            </div><!-- /.clr-row -->
+            <div class="dragable-container" dragula="LISTADO" [(dragulaModel)]="listado">
+                <div class="clr-row dragable" *ngFor="let lista of listado; index as i; first as inicial">
+                    <div class="clr-col-3">
+                        {{i+'. '+lista.id+' - '+lista.texto}}
+                    </div>
+                    <div class="clr-col-1">
+                        <button class="btn btn-link btn-icon">
+                            <clr-icon shape="trash"></clr-icon>
+                        </button>
+                    </div>
+                    <div class="clr-col"></div>
+                </div><!-- /.clr-row -->
             </div>
         </div>
     </div>
