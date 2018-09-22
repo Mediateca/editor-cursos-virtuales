@@ -25,38 +25,98 @@
     <div class="content-container">
         <div class="content-area">
             <div class="clr-row">
-                <div class="clr-col-4">
-
-
-
-                    <div class="dragable-container" dragula="LISTADO" [(dragulaModel)]="listado">
-                        <clr-tree-node class="clr-row dragable" *ngFor="let lista of listado; index as i; first as inicial">
-                            <clr-icon [attr.shape]="'home'"></clr-icon>
-                            {{lista.texto}}
-                        </clr-tree-node>
-                    </div>
-
-
+                <div class="clr-col-5">
+                    <clr-tree-node>
+                        <div class="clr-col-8">
+                            <clr-icon shape="certificate"></clr-icon>
+                            {{contenido.branding.nombreCurso? contenido.branding.nombreCurso : 'Curso sin nombre'}}
+                        </div>
+                        <div class="clr-col btn-group btn-primary btn-icon btn-sm">
+                            <button class="btn" (click)="editaComponente(contenido.branding)">
+                                <clr-icon shape="edit"></clr-icon>
+                            </button>
+                            <button class="btn" (click)="nuevoModulo()">
+                                <clr-icon shape="plus-circle"></clr-icon>
+                            </button>
+                        </div>
+                        <ng-template [clrIfExpanded]="true">
+                            <div class="dragable-container" dragula="MODULOS" [(dragulaModel)]="contenido.modulos">
+                                <clr-tree-node class="clr-row dragable clr-treenode-link" *ngFor="let modulo of contenido.modulos; index as i; first as inicial">
+                                    <div class="clr-col-8">
+                                        <clr-icon [attr.shape]="'blocks-group'"></clr-icon>
+                                        {{modulo.titulo? modulo.titulo : 'Módulo sin nombre'}}
+                                    </div>
+                                    <div class="clr-col">
+                                        <div class="btn-group btn-primary btn-icon btn-sm">
+                                            <button class="btn" (click)="editaComponente(modulo, i)">
+                                                <clr-icon shape="edit"></clr-icon>
+                                            </button>
+                                            <button class="btn" (click)="nuevoMomento(contenido.modulos[i].momentos)">
+                                                <clr-icon shape="plus-circle"></clr-icon>
+                                            </button>
+                                            <button class="btn btn-danger"
+                                                    (click)="intentaEliminarComponente(contenido.modulos,i)"
+                                                    *ngIf="!inicial">
+                                                <clr-icon shape="trash"></clr-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <ng-template [clrIfExpanded]="true">
+                                        <div class="dragable-container"
+                                             dragula="MOMENTOS" [(dragulaModel)]="contenido.modulos[i].momentos">
+                                            <clr-tree-node class="clr-row dragable clr-treenode-link" *ngFor="let momento of contenido.modulos[i].momentos; index as e; first as inicialM">
+                                                <div class="clr-col-8">
+                                                    <clr-icon [attr.shape]="'plugin'"></clr-icon>
+                                                    {{momento.titulo? momento.titulo : 'Momento sin nombre'}}
+                                                </div>
+                                                <div class="clr-col">
+                                                    <div class="btn-group btn-primary btn-icon btn-sm">
+                                                        <button class="btn" (click)="editaComponente(momento, e)">
+                                                            <clr-icon shape="edit"></clr-icon>
+                                                            <span class="clr-icon-title">Editar</span>
+                                                        </button>
+                                                        <button class="btn btn-danger"
+                                                                (click)="intentaEliminarComponente(contenido.modulos[i].momentos,e)"
+                                                                *ngIf="!inicialM">
+                                                            <clr-icon shape="trash"></clr-icon>
+                                                            <span class="clr-icon-title">Eliminar</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </clr-tree-node>
+                                        </div>
+                                    </ng-template>
+                                </clr-tree-node>
+                            </div>
+                        </ng-template>
+                    </clr-tree-node>
                 </div>
-                <div class="clr-col-8">
-                    {{texto}}
-                    <quill-editor [modules]="configuracionTexto" format="html" [(ngModel)]="texto" [placeholder]="texto"></quill-editor>
-                    <button class="btn btn-primary">Generar</button>
+                <div class="clr-col">
+                    {{contenido | json}}
+                    <div [ngSwitch]="componenteActivo">
+                        <app-branding [branding]="contenido.branding" *ngSwitchCase="contenido.branding"></app-branding>
+                        <app-modulo [contenido]="contenido"
+                                    [numModulo]="numComponente"
+                                    [modulo]="contenido.modulos[numComponente]"
+                                    *ngSwitchCase="contenido.modulos[numComponente]">
+                        </app-modulo>
+                    </div>
                 </div>
             </div><!-- /.clr-row -->
-            <div class="dragable-container" dragula="LISTADO" [(dragulaModel)]="listado">
-                <div class="clr-row dragable" *ngFor="let lista of listado; index as i; first as inicial">
-                    <div class="clr-col-3">
-                        {{i+'. '+lista.id+' - '+lista.texto}}
-                    </div>
-                    <div class="clr-col-1">
-                        <button class="btn btn-link btn-icon">
-                            <clr-icon shape="trash"></clr-icon>
-                        </button>
-                    </div>
-                    <div class="clr-col"></div>
-                </div><!-- /.clr-row -->
-            </div>
+            <clr-modal [(clrModalOpen)]="modalBasica.activa">
+                <h3 class="modal-title">{{modalBasica.titulo}}</h3>
+                <div class="modal-body">
+                    <p>{{modalBasica.texto}}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" (click)="modalBasica.activa = false">Cancelar</button>
+                    <button type="button"
+                            class="btn btn-danger"
+                            (click)="eliminaComponente(modalBasica.componente,modalBasica.num)">
+                        {{modalBasica.textoAccion}}
+                    </button>
+                </div>
+            </clr-modal>
         </div>
     </div>
 </div>
