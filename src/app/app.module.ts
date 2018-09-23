@@ -5,17 +5,19 @@ import { ClarityModule, ClrFormsNextModule } from '@clr/angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { QuillModule } from 'ngx-quill';
-import { DragulaModule } from 'ng2-dragula';
 import { BrandingComponent } from './branding/branding.component';
 import { TextoPlanoComponent } from './texto-plano/texto-plano.component';
 import { ModuloComponent } from './modulo/modulo.component';
+import { DragulaModule } from 'ng2-dragula';
+import { MomentoComponent } from './momento/momento.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         BrandingComponent,
         TextoPlanoComponent,
-        ModuloComponent
+        ModuloComponent,
+        MomentoComponent
     ],
     imports: [
         BrowserModule,
@@ -28,6 +30,6 @@ import { ModuloComponent } from './modulo/modulo.component';
     ],
     providers: [],
     bootstrap: [AppComponent],
-    exports: [BrandingComponent, TextoPlanoComponent, ModuloComponent]
+    exports: [BrandingComponent, TextoPlanoComponent, ModuloComponent, MomentoComponent]
 })
 export class AppModule { }
