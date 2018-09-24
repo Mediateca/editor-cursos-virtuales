@@ -10,6 +10,7 @@ import { TextoPlanoComponent } from './texto-plano/texto-plano.component';
 import { ModuloComponent } from './modulo/modulo.component';
 import { DragulaModule } from 'ng2-dragula';
 import { MomentoComponent } from './momento/momento.component';
+import { SeccionComponent } from './seccion/seccion.component';
 
 @NgModule({
     declarations: [
@@ -17,7 +18,8 @@ import { MomentoComponent } from './momento/momento.component';
         BrandingComponent,
         TextoPlanoComponent,
         ModuloComponent,
-        MomentoComponent
+        MomentoComponent,
+        SeccionComponent
     ],
     imports: [
         BrowserModule,
@@ -29,7 +31,6 @@ import { MomentoComponent } from './momento/momento.component';
         DragulaModule.forRoot()
     ],
     providers: [],
-    bootstrap: [AppComponent],
-    exports: [BrandingComponent, TextoPlanoComponent, ModuloComponent, MomentoComponent]
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

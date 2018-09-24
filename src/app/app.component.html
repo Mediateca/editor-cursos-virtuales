@@ -115,8 +115,10 @@
                                                                     </button>
                                                                 </div>
                                                             </div>
+                                                            <ng-template [clrIfExpanded]="true">
+                                                            </ng-template>
                                                         </clr-tree-node>
-                                                    </div>
+                                                    </div><!-- dragula -->
                                                 </ng-template>
                                             </clr-tree-node>
                                         </div><!-- dragula -->
@@ -141,20 +143,56 @@
                                      [momento]="editandoMomento"
                                      *ngSwitchCase="editandoMomento">
                         </app-momento>
+                        <app-seccion [momento]="editandoMomento"
+                                     [numSeccion]="numComponente"
+                                     [seccion]="editandoSeccion"
+                                     *ngSwitchCase="editandoSeccion">
+                        </app-seccion>
+                        <app-texto-plano [configuracionEditor]="configuracionEditor"
+                                         [texto]=""
+                                         [titulo]=""
+                                         *ngSwitchCase="'texto-plano'">
+                        </app-texto-plano>
                     </div>
                 </div>
             </div><!-- /.clr-row -->
-            <clr-modal [(clrModalOpen)]="modalBasica.activa">
-                <h3 class="modal-title">{{modalBasica.titulo}}</h3>
+            <clr-modal [(clrModalOpen)]="modalBorrar.activa">
+                <h3 class="modal-title">{{modalBorrar.titulo}}</h3>
                 <div class="modal-body">
-                    <p>{{modalBasica.texto}}</p>
+                    <p>{{modalBorrar.texto}}</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline" (click)="modalBasica.activa = false">Cancelar</button>
+                    <button type="button" class="btn btn-outline" (click)="modalBorrar.activa = false">Cancelar</button>
                     <button type="button"
                             class="btn btn-danger"
-                            (click)="eliminaComponente(modalBasica.componente,modalBasica.num)">
-                        {{modalBasica.textoAccion}}
+                            (click)="eliminaComponente(modalBorrar.componente,modalBorrar.num)">
+                        {{modalBorrar.textoAccion}}
+                    </button>
+                </div>
+            </clr-modal><!-- /clr-modal modalBorrar -->
+            <clr-modal [(clrModalOpen)]="modalNew.activa">
+                <h3 class="modal-title">{{modalNew.titulo}}</h3>
+                <div class="modal-body">
+                    <p>
+                        {{modalNew.texto}}
+                    </p>
+                    <form clrForm clrLayout="horizontal">
+                        <clr-select-container>
+                            <label>Componentes:</label>
+                            <select clrSelect name="tipoComponente" [(ngModel)]="tipoComponente">
+                                <option value="texto-plano">Texto plano</option>
+                                <option value="destacado">Destacado</option>
+                                <option value="recuerda">Recuerda</option>
+                            </select>
+                        </clr-select-container>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" (click)="modalNew.activa = false">Cancelar</button>
+                    <button type="button"
+                            class="btn btn-primary"
+                            (click)="iniciaNuevoComponente(modalNew.seccion, tipoComponente)">
+                        {{modalNew.textoAccion}}
                     </button>
                 </div>
             </clr-modal>
