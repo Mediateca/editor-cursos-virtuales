@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements DoCheck {
+export class AppComponent {
     categorias: Array<any> =[
         {'name':'MODULOS','class':'drag-modulo'},
         {'name':'MOMENTOS','class':'drag-momento'},
