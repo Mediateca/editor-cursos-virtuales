@@ -17,6 +17,11 @@ import { Component, Input } from '@angular/core';
                         <label>Nombre del curso</label>
                         <input clrInput type="text" [(ngModel)]="branding.nombreCurso" name="nombreCurso" size="60">
                     </clr-input-container>
+                    <clr-input-container>
+                        <label>Nombre corto del curso</label>
+                        <input clrInput type="text" [(ngModel)]="branding.nombreCursoCorto" name="nombreCursoCorto" size="6" maxlength="6" minlength="3">
+                        <clr-control-helper>Máximo 6 caracteres, mínimo 3.</clr-control-helper>
+                    </clr-input-container>
                 </form>
                 <br>
                 <div class="clr-row">
@@ -47,5 +52,4 @@ import { Component, Input } from '@angular/core';
 export class BrandingComponent {
     @Input() branding: any;
     colores: Array<any> = [1,2,3,4,5,6];
-    constructor() {}
 }

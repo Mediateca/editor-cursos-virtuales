@@ -1,0 +1,49 @@
+<header class="header header-6">
+    <div class="branding">
+        <div class="nav-link">
+            <span class="logo-mediateca"></span>
+            <span class="title">Mediateca</span>
+        </div>
+    </div>
+    <div class="header-nav">
+        <a class="nav-link nav-text"
+           *ngFor="let curso of cursosObs | async; index as i"
+           [ngClass]="{'active':i==numCurso}"
+           (click)="cambiarCurso(i)"
+           href="javascript://">
+            {{curso?.branding.nombreCursoCorto}}
+        </a>
+    </div>
+    <div class="header-actions">
+        <a href="javascript://" (click)="nuevoCurso()" class="nav-link nav-icon" title="Crear nuevo curso">
+            <clr-icon shape="plus-circle"></clr-icon>
+        </a>
+        <a href="javascript://" class="nav-link nav-icon" *ngIf="false" title="Ingresar al sistema">
+            <clr-icon shape="login"></clr-icon>
+        </a>
+        <a href="javascript://" class="nav-link nav-icon" *ngIf="false" title="Salir del sistema">
+            <clr-icon shape="logout"></clr-icon>
+        </a>
+    </div>
+</header>
+<clr-modal [(clrModalOpen)]="modalNew.activa">
+    <h3 class="modal-title">Crear nuevo curso</h3>
+    <div class="modal-body">
+        <p>Escriba el nombre corto del curso; no puede ser de más de 6 caracteres, ni de menos de 3.</p>
+        <p>Debe ser un nombre fácil de identificar. Aparecerá en la barra superior de navegación. Luego podrá cambiarlo si lo desea.</p>
+        <form clrForm clrLayout="horizontal">
+            <clr-input-container class="clr-row">
+                <label class="clr-col-4">Nombre corto del curso</label>
+                <input class="clr-col" clrInput type="text" [(ngModel)]="nombreCursoCorto" name="nombreCursoCorto" size="6" maxlength="6" minlength="3">
+                <clr-control-helper>Máximo 6 caracteres, mínimo 3.</clr-control-helper>
+                <clr-control-error>El nombre debe tener mínimo 3 caracteres.</clr-control-error>
+            </clr-input-container>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="modalNew.activa = false">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="creaCurso(nombreCursoCorto)" [disabled]="nombreCursoCorto?.length<3">
+            Crear nuevo curso
+        </button>
+    </div>
+</clr-modal>

@@ -1,37 +1,34 @@
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
+import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { DragulaService } from 'ng2-dragula';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements DoCheck {
     categorias: Array<any> =[
         {'name':'MODULOS','class':'drag-modulo'},
         {'name':'MOMENTOS','class':'drag-momento'},
         {'name':'SECCIONES','class':'drag-seccion'},
         {'name':'COMPONENTES','class':'drag-componente'}
     ];
-    constructor(private dragulaService: DragulaService) {
-        for (let group of this.categorias) {
-            dragulaService.createGroup(group.name, {
-                removeOnSpill: false,
-                moves: function (el, container, target) {
-                    if (target.classList) {
-                        return target.classList.contains(group.class);
-                    }
-                    return false;
-                }
-            });
-        }
-    }
+    datosInicializados: boolean = false;
+    tiposComponente: any = {
+        'texto-plano': {'icono':'text', 'nombre': 'Texto'},
+        'destacado': {'icono':'tag', 'nombre': 'Destacado'},
+        'recuerda': {'icono':'pinboard', 'nombre': 'Recuerda'}
+    };
     contenido: any = {
         "branding": {
             "tituloLargo": "",
             "tituloCorto": "",
             "colorPrimario": 1,
-            "nombreCurso": ""
+            "nombreCurso": "",
+            'nombreCursoCorto': ''
         },
         "modulos": [
             {
@@ -52,6 +49,53 @@ export class AppComponent {
             }
         ]
     };
+    componenteActivo: any = this.contenido.branding;
+    arrayComponentes: Array<any>;
+    curso: AngularFirestoreDocument<any>;
+    tiempo: any;
+    guardado: boolean = true;
+    constructor(private dragulaService: DragulaService,
+                 private sanitizer: DomSanitizer,
+                 public db: AngularFirestore) {
+        for (let group of this.categorias) {
+            dragulaService.createGroup(group.name, {
+                removeOnSpill: false,
+                moves: function (el, container, target) {
+                    if (target.classList) {
+                        return target.classList.contains(group.class);
+                    }
+                    return false;
+                }
+            });
+        }
+        this.arrayComponentes = Object.keys(this.tiposComponente).map(i => this.tiposComponente[i]);
+        for (let num in this.arrayComponentes) {
+            this.arrayComponentes[num].tipo = Object.keys(this.tiposComponente)[num];
+        }
+    }
+    cambiaCurso(nomCurso:string) {
+        let ruta: string = 'cursos/'+nomCurso;
+        this.curso = this.db.doc(ruta);
+        this.curso.valueChanges().subscribe(data => {
+            this.contenido = data;
+            this.componenteActivo = this.contenido.branding;
+            this.datosInicializados = true;
+            this.tiempo = setInterval(() => {
+                this.guardado = false;
+                setTimeout(()=>this.guardado=true, 2000);
+                this.curso.update(this.contenido);
+            },30000);
+        });
+    };
+    rutaDescargaJSON:SafeUrl;
+    generaRutaJSON() {
+        let elJSON = JSON.stringify(this.contenido);
+        let blob = new Blob([elJSON], { type: 'text/json' });
+        let url = window.URL.createObjectURL(blob);
+        let uri:SafeUrl = this.sanitizer.bypassSecurityTrustUrl(url);
+        this.rutaDescargaJSON = uri;
+        return uri;
+    }
     modalBorrar: any = {};
     modalNew: any = {};
     configuracionEditor = {toolbar: [
@@ -62,7 +106,6 @@ export class AppComponent {
         [{ 'indent': '-1'}, { 'indent': '+1' }],
         ['link'],['clean']
     ]};
-    componenteActivo: any = this.contenido.branding;
     numComponente: number = 0;
     editandoModulo: any;
     editandoMomento: any;
@@ -83,8 +126,15 @@ export class AppComponent {
         this.editandoSeccion = componente;
         this.componenteActivo = componente;
     };
-    intentaEliminarComponente(componente: any, num: number) {
-        let titulo: string = componente[num].titulo?componente[num].titulo:"componente sin nombre";
+    editaComponente(seccion:any,num:number,tipo:string){
+        this.componenteActivo = tipo;
+        this.editandoSeccion = seccion;
+        this.numComponente = num;
+    };
+    intentaEliminarComponente(componente: any, num: number, titulo: string = undefined) {
+        if (!titulo) {
+            let titulo: string = componente[num].titulo?componente[num].titulo:"componente sin nombre";
+        }
         this.modalBorrar = {
             "titulo": "Esta acción borrará "+titulo+".",
             "texto": "¿Está seguro de eliminar "+titulo+"? Esta acción es irreversible.",
@@ -98,15 +148,6 @@ export class AppComponent {
         componente.splice(num, 1);
         this.modalBorrar = {"activa":false};
     };
-    nuevoModulo() {
-        this.contenido.modulos.push({"titulo":"","intro":"","momentos":[{"titulo":"","intro":"","secciones":[{"titulo":"","componentes":[]}]}]});
-    };
-    nuevoMomento(modulo: any) {
-        modulo.push({"titulo":"","intro":"","secciones":[{"titulo":"","componentes":[]}]});
-    };
-    nuevaSeccion(momento: any) {
-        momento.push({"titulo":"","componentes":[]});
-    };
     nuevoComponente(seccion: any) {
         this.modalNew = {
             "titulo": "Crear un nuevo componente de contenido",
@@ -116,11 +157,27 @@ export class AppComponent {
             "activa": true
         }
     }
-    iniciaNuevoComponente(seccion: any, tipoComponente: string){
+    nuevoElemento(elemento:any,tipo:string) {
+        switch(tipo) {
+            case 'modulo':
+                elemento.push({"titulo":"","intro":"","momentos":[{"titulo":"","intro":"","secciones":[{"titulo":"","componentes":[]}]}]});
+                break;
+            case 'momento':
+                elemento.push({"titulo":"","intro":"","secciones":[{"titulo":"","componentes":[]}]});
+                break;
+            case 'seccion':
+                elemento.push({"titulo":"","componentes":[]});
+                break;
+            case 'texto-plano':
+                elemento.componentes.push({'tipo': tipo, 'contenido': {'texto':''}});
+                break;
+            case 'destacado':
+                elemento.componentes.push({'tipo': tipo, 'contenido': {'texto':'','titulo':''}});
+                break;
+            case 'recuerda':
+                elemento.componentes.push({'tipo': tipo, 'contenido': {'texto':''}});
+                break;
+        }
         this.modalNew = {'activa':false};
-        this.componenteActivo = tipoComponente;
     }
-    escribe(entrada:any){
-        console.log(entrada)
-    };
 }

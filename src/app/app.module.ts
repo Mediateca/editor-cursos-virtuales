@@ -11,6 +11,13 @@ import { ModuloComponent } from './modulo/modulo.component';
 import { DragulaModule } from 'ng2-dragula';
 import { MomentoComponent } from './momento/momento.component';
 import { SeccionComponent } from './seccion/seccion.component';
+import { DestacadoComponent } from './destacado/destacado.component';
+import { RecuerdaComponent } from './recuerda/recuerda.component';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { environment } from '../environments/environment';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
     declarations: [
@@ -19,7 +26,10 @@ import { SeccionComponent } from './seccion/seccion.component';
         TextoPlanoComponent,
         ModuloComponent,
         MomentoComponent,
-        SeccionComponent
+        SeccionComponent,
+        DestacadoComponent,
+        RecuerdaComponent,
+        HeaderComponent
     ],
     imports: [
         BrowserModule,
@@ -28,7 +38,10 @@ import { SeccionComponent } from './seccion/seccion.component';
         BrowserAnimationsModule,
         FormsModule,
         QuillModule,
-        DragulaModule.forRoot()
+        DragulaModule.forRoot(),
+        AngularFireModule.initializeApp(environment.firebase),
+        AngularFirestoreModule,
+        AngularFireStorageModule
     ],
     providers: [],
     bootstrap: [AppComponent]

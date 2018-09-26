@@ -1,4 +1,11 @@
-app-control-arbol {
-    flex: 1 1 auto;
-    display: flex;
+.main-container {
+    .content-container {
+        .content-area {
+            .alerta {
+                position: fixed;
+                top: 0;
+                width: 15rem;
+            }
+        }
+    }
 }
