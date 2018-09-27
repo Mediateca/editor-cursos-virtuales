@@ -2,128 +2,184 @@
     <app-header (cambiaCurso)="cambiaCurso($event)"></app-header>
     <div class="content-container">
         <div class="content-area">
-            <clr-alert class="alerta" [clrAlertType]="'alert-success'" [clrAlertSizeSmall]="true" [clrAlertClosed]="guardado">
-                <div clr-alert-item class="alert-item">
-                    <span class="alert-text">
-                        Datos guardados con éxito.
-                    </span>
-                </div>
-            </clr-alert>
             <div class="clr-row">
                 <div class="clr-col-5">
-                    <clr-tree-node>
-                        <div class="clr-col-8">
+                    <div class="clr-row titulo-estructura">
+                        <div class="clr-col">
+                            <h1>Estructura</h1>
+                        </div>
+                        <div class="clr-col-5">
+                            <a class="btn btn-outline btn-block" [href]="generaRutaJSON()" download="contenido.json">
+                                <clr-icon shape="download"></clr-icon>
+                                Descargar JSON
+                            </a>
+                        </div>
+                    </div>
+                    <clr-tree-node class="estructura">
+                        <div class="fila">
                             <clr-icon shape="certificate"></clr-icon>
                             {{contenido.branding.nombreCurso? contenido.branding.nombreCurso : 'Curso sin nombre'}}
-                        </div>
-                        <div class="clr-col btn-group btn-primary btn-icon btn-sm">
-                            <a class="btn" [href]="generaRutaJSON()" download="contenido.json">
-                                <clr-icon shape="download"></clr-icon>
-                            </a>
-                            <button class="btn" (click)="editaModulo(contenido.branding)">
-                                <clr-icon shape="edit"></clr-icon>
-                            </button>
-                            <button class="btn" (click)="nuevoElemento(contenido.modulos,'modulo')">
-                                <clr-icon shape="plus-circle"></clr-icon>
-                            </button>
+                            <div class="btn-group btn-link btn-icon btn-sm">
+                                <clr-tooltip>
+                                    <button clrTooltipTrigger class="btn" (click)="editaModulo(contenido.branding)">
+                                        <clr-icon shape="edit"></clr-icon>
+                                    </button>
+                                    <clr-tooltip-content clrPosition="top-right" clrSize="sm" *clrIfOpen>
+                                        <span>Editar Curso</span>
+                                    </clr-tooltip-content>
+                                </clr-tooltip>
+                                <clr-tooltip>
+                                    <button clrTooltipTrigger class="btn" (click)="nuevoElemento(contenido.modulos,'modulo')">
+                                        <clr-icon shape="plus-circle"></clr-icon>
+                                    </button>
+                                    <clr-tooltip-content clrPosition="top-right" clrSize="sm" *clrIfOpen>
+                                        <span>Crear nuevo Módulo</span>
+                                    </clr-tooltip-content>
+                                </clr-tooltip>
+                            </div>
                         </div>
                         <ng-template [clrIfExpanded]="true">
                             <div class="dragable-container" dragula="MODULOS" [(dragulaModel)]="contenido.modulos">
-                                <clr-tree-node class="clr-row dragable clr-treenode-link"
+                                <clr-tree-node class="clr-row dragable clr-treenode-link estructura"
                                                *ngFor="let modulo of contenido.modulos; index as i; first as inicial">
-                                    <div class="clr-col-8 drag-modulo">
-                                        <clr-icon [attr.shape]="'blocks-group'"></clr-icon>
+                                    <div class="fila drag-modulo">
+                                        <clr-icon shape="blocks-group"></clr-icon>
                                         {{modulo.titulo? modulo.titulo : 'Módulo sin nombre'}}
-                                    </div>
-                                    <div class="clr-col">
-                                        <div class="btn-group btn-primary btn-icon btn-sm">
-                                            <button class="btn" (click)="editaModulo(modulo, i)">
-                                                <clr-icon shape="edit"></clr-icon>
-                                            </button>
-                                            <button class="btn" (click)="nuevoElemento(modulo.momentos,'momento')">
-                                                <clr-icon shape="plus-circle"></clr-icon>
-                                            </button>
-                                            <button class="btn btn-danger"
-                                                    (click)="intentaEliminarComponente(contenido.modulos,i)"
-                                                    *ngIf="!inicial">
-                                                <clr-icon shape="trash"></clr-icon>
-                                            </button>
+                                        <div class="btn-group btn-link btn-icon btn-sm">
+                                            <clr-tooltip>
+                                                <button clrTooltipTrigger class="btn" (click)="editaModulo(modulo, i)">
+                                                    <clr-icon shape="edit"></clr-icon>
+                                                </button>
+                                                <clr-tooltip-content clrPosition="top-right" clrSize="sm" *clrIfOpen>
+                                                    <span>Editar Módulo</span>
+                                                </clr-tooltip-content>
+                                            </clr-tooltip>
+                                            <clr-tooltip>
+                                                <button clrTooltipTrigger class="btn" (click)="nuevoElemento(modulo.momentos,'momento')">
+                                                    <clr-icon shape="plus-circle"></clr-icon>
+                                                </button>
+                                                <clr-tooltip-content clrPosition="top-right" clrSize="sm" *clrIfOpen>
+                                                    <span>Crear nuevo Momento</span>
+                                                </clr-tooltip-content>
+                                            </clr-tooltip>
+                                            <clr-tooltip>
+                                                <button clrTooltipTrigger class="btn" (click)="intentaEliminarComponente(contenido.modulos,i)" *ngIf="!inicial">
+                                                    <clr-icon shape="trash"></clr-icon>
+                                                </button>
+                                                <clr-tooltip-content clrPosition="top-right" clrSize="sm" *clrIfOpen>
+                                                    <span>Eliminar Módulo</span>
+                                                </clr-tooltip-content>
+                                            </clr-tooltip>
                                         </div>
-                                    </div>
+                                    </div><!-- /.fila -->
                                     <ng-template [clrIfExpanded]="true">
                                         <div class="dragable-container"
                                              dragula="MOMENTOS" [(dragulaModel)]="modulo.momentos">
                                             <clr-tree-node class="clr-row dragable clr-treenode-link"
                                                            *ngFor="let momento of modulo.momentos; index as e; first as inicialM">
-                                                <div class="clr-col-8 drag-momento">
+                                                <div class="fila drag-momento">
                                                     <clr-icon [attr.shape]="'list'"></clr-icon>
                                                     {{momento.titulo? momento.titulo : 'Momento sin nombre'}}
-                                                </div>
-                                                <div class="clr-col">
-                                                    <div class="btn-group btn-primary btn-icon btn-sm">
-                                                        <button class="btn" (click)="editaMomento(modulo,momento,e)">
-                                                            <clr-icon shape="edit"></clr-icon>
-                                                            <span class="clr-icon-title">Editar</span>
-                                                        </button>
-                                                        <button class="btn" (click)="nuevoElemento(momento.secciones,'seccion')">
-                                                            <clr-icon shape="plus-circle"></clr-icon>
-                                                        </button>
-                                                        <button class="btn btn-danger"
-                                                                (click)="intentaEliminarComponente(modulo.momentos,e)"
-                                                                *ngIf="!inicialM">
-                                                            <clr-icon shape="trash"></clr-icon>
-                                                            <span class="clr-icon-title">Eliminar</span>
-                                                        </button>
+                                                    <div class="btn-group btn-link btn-icon btn-sm">
+                                                        <clr-tooltip>
+                                                            <button clrTooltipTrigger class="btn" (click)="editaMomento(modulo,momento,e)">
+                                                                <clr-icon shape="edit"></clr-icon>
+                                                                <span class="clr-icon-title">Editar</span>
+                                                            </button>
+                                                            <clr-tooltip-content clrPosition="top-right" clrSize="sm" *clrIfOpen>
+                                                                <span>Editar Momento</span>
+                                                            </clr-tooltip-content>
+                                                        </clr-tooltip>
+                                                        <clr-tooltip>
+                                                            <button clrTooltipTrigger class="btn" (click)="nuevoElemento(momento.secciones,'seccion')">
+                                                                <clr-icon shape="plus-circle"></clr-icon>
+                                                            </button>
+                                                            <clr-tooltip-content clrPosition="top-right" clrSize="sm" *clrIfOpen>
+                                                                <span>Crear nueva Sección</span>
+                                                            </clr-tooltip-content>
+                                                        </clr-tooltip>
+                                                        <clr-tooltip>
+                                                            <button clrTooltipTrigger class="btn btn-danger"
+                                                                    (click)="intentaEliminarComponente(modulo.momentos,e)"
+                                                                    *ngIf="!inicialM">
+                                                                <clr-icon shape="trash"></clr-icon>
+                                                                <span class="clr-icon-title">Eliminar</span>
+                                                            </button>
+                                                            <clr-tooltip-content clrPosition="top-right" clrSize="sm" *clrIfOpen>
+                                                                <span>Eliminar Momento</span>
+                                                            </clr-tooltip-content>
+                                                        </clr-tooltip>
                                                     </div>
-                                                </div>
+                                                </div><!-- /.fila -->
                                                 <ng-template [clrIfExpanded]="true">
                                                     <div class="dragable-container"
                                                          dragula="SECCIONES"
                                                          [(dragulaModel)]="momento.secciones">
                                                         <clr-tree-node class="clr-row dragable clr-treenode-link"
                                                                        *ngFor="let seccion of momento.secciones; index as q; first as inicialS">
-                                                            <div class="clr-col-8 drag-seccion">
+                                                            <div class="fila drag-seccion">
                                                                 <clr-icon [attr.shape]="'file'"></clr-icon>
                                                                 {{seccion.titulo? seccion.titulo : 'Sección sin nombre'}}
-                                                            </div>
-                                                            <div class="clr-col">
-                                                                <div class="btn-group btn-primary btn-icon btn-sm">
-                                                                    <button class="btn" (click)="editaSeccion(momento,seccion,q)">
-                                                                        <clr-icon shape="edit"></clr-icon>
-                                                                        <span class="clr-icon-title">Editar</span>
-                                                                    </button>
-                                                                    <button class="btn" (click)="nuevoComponente(seccion)">
-                                                                        <clr-icon shape="plus-circle"></clr-icon>
-                                                                    </button>
-                                                                    <button class="btn btn-danger"
-                                                                            (click)="intentaEliminarComponente(momento.secciones,e)"
-                                                                            *ngIf="!inicialS">
-                                                                        <clr-icon shape="trash"></clr-icon>
-                                                                        <span class="clr-icon-title">Eliminar</span>
-                                                                    </button>
+                                                                <div class="btn-group btn-link btn-icon btn-sm">
+                                                                    <clr-tooltip>
+                                                                        <button clrTooltipTrigger class="btn" (click)="editaSeccion(momento,seccion,q)">
+                                                                            <clr-icon shape="edit"></clr-icon>
+                                                                            <span class="clr-icon-title">Editar</span>
+                                                                        </button>
+                                                                        <clr-tooltip-content clrPosition="top-right" clrSize="sm" *clrIfOpen>
+                                                                            <span>Editar Sección</span>
+                                                                        </clr-tooltip-content>
+                                                                    </clr-tooltip>
+                                                                    <clr-tooltip>
+                                                                        <button clrTooltipTrigger class="btn" (click)="nuevoComponente(seccion)">
+                                                                            <clr-icon shape="plus-circle"></clr-icon>
+                                                                        </button>
+                                                                        <clr-tooltip-content clrPosition="top-right" clrSize="sm" *clrIfOpen>
+                                                                            <span>Crear nuevo Componente</span>
+                                                                        </clr-tooltip-content>
+                                                                    </clr-tooltip>
+                                                                    <clr-tooltip>
+                                                                        <button clrTooltipTrigger class="btn btn-danger"
+                                                                                (click)="intentaEliminarComponente(momento.secciones,e)"
+                                                                                *ngIf="!inicialS">
+                                                                            <clr-icon shape="trash"></clr-icon>
+                                                                            <span class="clr-icon-title">Eliminar</span>
+                                                                        </button>
+                                                                        <clr-tooltip-content clrPosition="top-right" clrSize="sm" *clrIfOpen>
+                                                                            <span>Eliminar Sección</span>
+                                                                        </clr-tooltip-content>
+                                                                    </clr-tooltip>
                                                                 </div>
-                                                            </div>
+                                                            </div><!-- /.fila -->
                                                             <ng-template [clrIfExpanded]="true">
                                                                 <div class="dragable-container" dragula="COMPONENTES"
                                                                      [(dragulaModel)]="seccion.componentes">
                                                                     <clr-tree-node class="clr-row dragable clr-treenode-link"
                                                                                    *ngFor="let componente of seccion.componentes; index as g; first as inicialC">
-                                                                        <div class="clr-col-8 drag-componente">
+                                                                        <div class="fila drag-componente">
                                                                             <clr-icon [attr.shape]="tiposComponente[componente.tipo].icono"></clr-icon>
                                                                             {{tiposComponente[componente.tipo].nombre}}
-                                                                        </div>
-                                                                        <div class="clr-col">
-                                                                            <div class="btn-group btn-primary btn-icon btn-sm">
-                                                                                <button class="btn" (click)="editaComponente(seccion,g,componente.tipo)">
-                                                                                    <clr-icon shape="edit"></clr-icon>
-                                                                                    <span class="clr-icon-title">Editar</span>
-                                                                                </button>
-                                                                                <button class="btn btn-danger" (click)="intentaEliminarComponente(seccion.componentes,q,tiposComponente[componente.tipo].nombre)" *ngIf="!inicialC">
-                                                                                    <clr-icon shape="trash"></clr-icon>
-                                                                                    <span class="clr-icon-title">Eliminar</span>
-                                                                                </button>
+                                                                            <div class="btn-group btn-link btn-icon btn-sm">
+                                                                                <clr-tooltip>
+                                                                                    <button clrTooltipTrigger class="btn" (click)="editaComponente(seccion,g,componente.tipo)">
+                                                                                        <clr-icon shape="edit"></clr-icon>
+                                                                                        <span class="clr-icon-title">Editar</span>
+                                                                                    </button>
+                                                                                    <clr-tooltip-content clrPosition="top-right" clrSize="md" *clrIfOpen>
+                                                                                        <span>Editar Componente {{componente.tipo}}</span>
+                                                                                    </clr-tooltip-content>
+                                                                                </clr-tooltip>
+                                                                                <clr-tooltip>
+                                                                                    <button clrTooltipTrigger class="btn btn-danger" (click)="intentaEliminarComponente(seccion.componentes,q,tiposComponente[componente.tipo].nombre)">
+                                                                                        <clr-icon shape="trash"></clr-icon>
+                                                                                        <span class="clr-icon-title">Eliminar</span>
+                                                                                    </button>
+                                                                                    <clr-tooltip-content clrPosition="top-right" clrSize="md" *clrIfOpen>
+                                                                                        <span>Eliminar Componente {{componente.tipo}}</span>
+                                                                                    </clr-tooltip-content>
+                                                                                </clr-tooltip>
                                                                             </div>
-                                                                        </div>
+                                                                        </div><!-- /.fila -->
                                                                     </clr-tree-node>
                                                                 </div><!-- dragula -->
                                                             </ng-template>
@@ -137,8 +193,35 @@
                             </div><!-- dragula -->
                         </ng-template>
                     </clr-tree-node>
+                    <div class="card">
+                        <div class="card-block clr-row clr-align-items-center">
+                            <div class="clr-col">
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="toggle" checked [(ngModel)]="autoguardado" (change)="activaAutoguardado(autoguardado)">
+                                    <label for="toggle">Autoguardar contenido cada 30 segundos</label>
+                                </div>
+                                <clr-alert class="alerta" [clrAlertType]="'alert-success'" [clrAlertSizeSmall]="true" [clrAlertClosed]="guardado">
+                                    <div clr-alert-item class="alert-item">
+                                        <span class="alert-text">
+                                            Datos guardados con éxito.
+                                        </span>
+                                    </div>
+                                </clr-alert>
+                            </div>
+                            <div class="clr-col-3">
+                                <button class="btn" (click)="guardaContenido()">
+                                    <clr-icon shape="floppy"></clr-icon>
+                                    GUARDAR
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div><!-- /.clr-col-5 -->
                 <div class="clr-col">
+                        <app-tabla [configuracionEditor]="configuracionEditor"
+                                   [seccion]="editandoSeccion"
+                                   [num]="numComponente">
+                        </app-tabla>
                     {{contenido | json}}
                     <div [ngSwitch]="componenteActivo">
                         <app-branding [branding]="contenido.branding" *ngSwitchCase="contenido.branding">
@@ -174,6 +257,11 @@
                                       [num]="numComponente"
                                       *ngSwitchCase="'recuerda'">
                         </app-recuerda>
+                        <app-tabla [configuracionEditor]="configuracionEditor"
+                                   [seccion]="editandoSeccion"
+                                   [num]="numComponente"
+                                   *ngSwitchCase="'tabla'">
+                        </app-tabla>
                     </div>
                 </div>
             </div><!-- /.clr-row -->

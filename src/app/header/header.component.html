@@ -15,15 +15,30 @@
         </a>
     </div>
     <div class="header-actions">
-        <a href="javascript://" (click)="nuevoCurso()" class="nav-link nav-icon" title="Crear nuevo curso">
-            <clr-icon shape="plus-circle"></clr-icon>
-        </a>
-        <a href="javascript://" class="nav-link nav-icon" *ngIf="false" title="Ingresar al sistema">
-            <clr-icon shape="login"></clr-icon>
-        </a>
-        <a href="javascript://" class="nav-link nav-icon" *ngIf="false" title="Salir del sistema">
-            <clr-icon shape="logout"></clr-icon>
-        </a>
+        <clr-tooltip>
+            <a clrTooltipTrigger href="javascript://" (click)="nuevoCurso()" class="nav-link nav-icon" title="Crear nuevo curso">
+                <clr-icon shape="plus-circle"></clr-icon>
+            </a>
+            <clr-tooltip-content clrPosition="left" clrSize="sm" *clrIfOpen>
+                <span>Crear nuevo curso</span>
+            </clr-tooltip-content>
+        </clr-tooltip>
+        <clr-tooltip>
+            <a clrTooltipTrigger href="javascript://" class="nav-link nav-icon" *ngIf="false" title="Ingresar al sistema">
+                <clr-icon shape="login"></clr-icon>
+            </a>
+            <clr-tooltip-content clrPosition="left" clrSize="sm" *clrIfOpen>
+                <span>Ingresar al sistema</span>
+            </clr-tooltip-content>
+        </clr-tooltip>
+        <clr-tooltip>
+            <a clrTooltipTrigger href="javascript://" class="nav-link nav-icon" *ngIf="false" title="Salir del sistema">
+                <clr-icon shape="logout"></clr-icon>
+            </a>
+            <clr-tooltip-content clrPosition="left" clrSize="sm" *clrIfOpen>
+                <span>Salir del sistema</span>
+            </clr-tooltip-content>
+        </clr-tooltip>
     </div>
 </header>
 <clr-modal [(clrModalOpen)]="modalNew.activa">

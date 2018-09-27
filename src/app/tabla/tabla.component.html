@@ -1,0 +1,6 @@
+<!--h1>Tabla en la sección {{seccion.titulo?seccion.titulo:'sin nombre.'}}</h1-->
+<h2>Estructura de la tabla</h2>
+{{tabla.contenido.head.contenido[0].fila.contenido[0].celda.contenido}}
+<input type="text" [(ngModel)]="tabla.contenido.head.contenido[0].fila.contenido[0].celda.contenido">
+<h2>Tabla resultado</h2>
+<div [innerHTML]="produceTabla() | sanitizeHtml: 'html'"></div>

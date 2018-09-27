@@ -20,7 +20,8 @@ export class AppComponent {
     tiposComponente: any = {
         'texto-plano': {'icono':'text', 'nombre': 'Texto'},
         'destacado': {'icono':'tag', 'nombre': 'Destacado'},
-        'recuerda': {'icono':'pinboard', 'nombre': 'Recuerda'}
+        'recuerda': {'icono':'pinboard', 'nombre': 'Recuerda'},
+        'tabla': {'icono':'grid-view', 'nombre': 'Tabla'}
     };
     contenido: any = {
         "branding": {
@@ -53,6 +54,7 @@ export class AppComponent {
     arrayComponentes: Array<any>;
     curso: AngularFirestoreDocument<any>;
     tiempo: any;
+    autoguardado: boolean = true;
     guardado: boolean = true;
     constructor(private dragulaService: DragulaService,
                  private sanitizer: DomSanitizer,
@@ -80,13 +82,27 @@ export class AppComponent {
             this.contenido = data;
             this.componenteActivo = this.contenido.branding;
             this.datosInicializados = true;
+            this.activaAutoguardado(this.autoguardado);
+        });
+    };
+    activaAutoguardado(guardar:boolean) {
+        this.autoguardado = guardar;
+        if (guardar) {
             this.tiempo = setInterval(() => {
                 this.guardado = false;
                 setTimeout(()=>this.guardado=true, 2000);
                 this.curso.update(this.contenido);
             },30000);
-        });
-    };
+        } else {
+            clearInterval(this.tiempo);
+            this.guardado = true;
+        }
+    }
+    guardaContenido() {
+        this.curso.update(this.contenido);
+        this.guardado = false;
+        setTimeout(()=>this.guardado=true, 1000);
+    }
     rutaDescargaJSON:SafeUrl;
     generaRutaJSON() {
         let elJSON = JSON.stringify(this.contenido);
@@ -175,6 +191,9 @@ export class AppComponent {
                 elemento.componentes.push({'tipo': tipo, 'contenido': {'texto':'','titulo':''}});
                 break;
             case 'recuerda':
+                elemento.componentes.push({'tipo': tipo, 'contenido': {'texto':''}});
+                break;
+            case 'tabla':
                 elemento.componentes.push({'tipo': tipo, 'contenido': {'texto':''}});
                 break;
         }

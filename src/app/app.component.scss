@@ -1,9 +1,29 @@
 .main-container {
     .content-container {
         .content-area {
+            .titulo-estructura {
+                align-items: center;
+                h1 {
+                    margin-top: 0;
+                }
+            }
+            .estructura {
+                .fila {
+                    width: 100%;
+                    .btn-group {
+                        opacity: 0;
+                        float: right;
+                    }
+                    &:hover {
+                        background-color: rgba(0,0,0,0.05);
+                        .btn-group {
+                            opacity: 1;
+                        }
+                    }
+                }
+            }
             .alerta {
                 position: fixed;
-                top: 0;
                 width: 15rem;
             }
         }

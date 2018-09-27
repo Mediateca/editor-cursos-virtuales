@@ -18,6 +18,8 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { environment } from '../environments/environment';
 import { HeaderComponent } from './header/header.component';
+import { TablaComponent } from './tabla/tabla.component';
+import { SanitizeHtmlPipe } from './sanitize-html.pipe';
 
 @NgModule({
     declarations: [
@@ -29,7 +31,9 @@ import { HeaderComponent } from './header/header.component';
         SeccionComponent,
         DestacadoComponent,
         RecuerdaComponent,
-        HeaderComponent
+        HeaderComponent,
+        TablaComponent,
+        SanitizeHtmlPipe
     ],
     imports: [
         BrowserModule,
