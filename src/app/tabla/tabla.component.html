@@ -1,6 +1,19 @@
-<!--h1>Tabla en la sección {{seccion.titulo?seccion.titulo:'sin nombre.'}}</h1-->
+<h1>
+    <clr-signpost>
+        <clr-icon shape="eye" clrSignpostTrigger></clr-icon>
+        <clr-signpost-content [clrPosition]="'left-bottom'" *clrIfOpen>
+            <h3>Tabla resultado</h3>
+            <div [innerHTML]="seccion.componentes[num].contenido.texto | sanitizeHtml: 'html'"></div>
+        </clr-signpost-content>
+    </clr-signpost>
+    Tabla en la sección {{seccion.titulo?seccion.titulo:'sin nombre'}}
+</h1>
+<div class="toggle-switch">
+    <input type="checkbox" id="tablaCompacta" [(ngModel)]="compacta">
+    <label for="tablaCompacta">Tabla compacta</label>
+</div>
 <h2>Estructura de la tabla</h2>
-{{tabla.contenido.head.contenido[0].fila.contenido[0].celda.contenido}}
-<input type="text" [(ngModel)]="tabla.contenido.head.contenido[0].fila.contenido[0].celda.contenido">
-<h2>Tabla resultado</h2>
-<div [innerHTML]="produceTabla() | sanitizeHtml: 'html'"></div>
+<app-theader *ngFor="let fila of tabla.contenido.head.contenido" [fila]="fila.fila.contenido">
+</app-theader>
+<app-tbody *ngFor="let fila of tabla.contenido.body.contenido" [fila]="fila.fila.contenido" [configuracionEditor]="configuracionEditor">
+</app-tbody>

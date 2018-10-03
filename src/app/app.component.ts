@@ -3,11 +3,50 @@ import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browse
 import { DragulaService } from 'ng2-dragula';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss']
+    styleUrls: ['./app.component.scss'],
+    animations: [
+        trigger('animMenu',[
+            state('abierto', style(
+                {maxWidth: '41.666667%'}
+            )),
+            state('cerrado', style(
+                {maxWidth: '0%'}
+            )),
+            transition('abierto <=> cerrado', animate('800ms 0.5s ease-out'))
+        ]),
+        trigger('animContenido', [
+            state('abierto', style(
+                {opacity: '1'}
+            )),
+            state('cerrado', style(
+                {opacity: '0'}
+            )),
+            transition('abierto <=> cerrado', animate('800ms 0.5s ease-out'))
+        ]),
+        trigger('animBoton', [
+            state('abierto', style(
+                {right: '0'}
+            )),
+            state('cerrado', style(
+                {right: '-1rem'}
+            )),
+            transition('abierto <=> cerrado', animate('800ms 0.5s ease-out'))
+        ]),
+        trigger('animIcono', [
+            state('abierto', style(
+                {transform: 'rotate(270deg)'}
+            )),
+            state('cerrado', style(
+                {transform: 'rotate(90deg)'}
+            )),
+            transition('abierto <=> cerrado', animate(500))
+        ])
+    ]
 })
 export class AppComponent {
     categorias: Array<any> =[
@@ -54,7 +93,11 @@ export class AppComponent {
     arrayComponentes: Array<any>;
     curso: AngularFirestoreDocument<any>;
     tiempo: any;
-    autoguardado: boolean = true;
+    panelAbierto: string = 'abierto';
+    togglePanel() {
+        this.panelAbierto = this.panelAbierto == 'abierto'?'cerrado':'abierto';
+    }
+    autoguardado: boolean = false; //-----------------------> Autoguardado
     guardado: boolean = true;
     constructor(private dragulaService: DragulaService,
                  private sanitizer: DomSanitizer,
@@ -119,7 +162,6 @@ export class AppComponent {
         ['bold', 'italic', 'underline', 'strike','blockquote'],
         [{ 'list': 'ordered'}, { 'list': 'bullet' }],
         [{ 'script': 'sub'}, { 'script': 'super' }],
-        [{ 'indent': '-1'}, { 'indent': '+1' }],
         ['link'],['clean']
     ]};
     numComponente: number = 0;
@@ -188,7 +230,7 @@ export class AppComponent {
                 elemento.componentes.push({'tipo': tipo, 'contenido': {'texto':''}});
                 break;
             case 'destacado':
-                elemento.componentes.push({'tipo': tipo, 'contenido': {'texto':'','titulo':''}});
+                elemento.componentes.push({'tipo': tipo, 'contenido': {'texto':'','titulo':'', 'opcion':0}});
                 break;
             case 'recuerda':
                 elemento.componentes.push({'tipo': tipo, 'contenido': {'texto':''}});

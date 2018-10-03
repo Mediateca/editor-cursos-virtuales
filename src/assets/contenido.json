@@ -23,7 +23,7 @@
                             "contenido": {
                                 "titulo": "¡No olvides!",
                                 "texto": "Vivamus nisl erat, vestibulum vitae posuere eget, interdum eu lectus. Vestibulum sodales dignissim turpis eu efficitur. Nulla tellus enim, imperdiet non sapien et, aliquet pretium turpis. Nulla nec consequat nulla. Una línea de texto destacado.<ul class=\"list\"><li>Ullamco Laboris</li><li>Consequat</li><li>Excepteur sint occaecat cupidatat non proident</li><li>Enim ad Minim</li></ul>",
-                                "cabezaIzq": true
+                                "opcion": 1
                             }
                         }
                     ]

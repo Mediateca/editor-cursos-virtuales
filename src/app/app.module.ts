@@ -1,8 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ClarityModule, ClrFormsNextModule } from '@clr/angular';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { QuillModule } from 'ngx-quill';
 import { BrandingComponent } from './branding/branding.component';
@@ -20,6 +20,9 @@ import { environment } from '../environments/environment';
 import { HeaderComponent } from './header/header.component';
 import { TablaComponent } from './tabla/tabla.component';
 import { SanitizeHtmlPipe } from './sanitize-html.pipe';
+import { TheaderComponent } from './tabla/theader/theader.component';
+import { TbodyComponent } from './tabla/tbody/tbody.component';
+import { MediaComponent } from './media/media.component';
 
 @NgModule({
     declarations: [
@@ -33,7 +36,10 @@ import { SanitizeHtmlPipe } from './sanitize-html.pipe';
         RecuerdaComponent,
         HeaderComponent,
         TablaComponent,
-        SanitizeHtmlPipe
+        SanitizeHtmlPipe,
+        TheaderComponent,
+        TbodyComponent,
+        MediaComponent
     ],
     imports: [
         BrowserModule,
@@ -44,7 +50,7 @@ import { SanitizeHtmlPipe } from './sanitize-html.pipe';
         QuillModule,
         DragulaModule.forRoot(),
         AngularFireModule.initializeApp(environment.firebase),
-        AngularFirestoreModule,
+        AngularFirestoreModule.enablePersistence(),
         AngularFireStorageModule
     ],
     providers: [],

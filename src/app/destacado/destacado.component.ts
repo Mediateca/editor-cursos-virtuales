@@ -11,6 +11,10 @@ import { Quill } from 'quill';
                         <label>Título del destacado</label>
                         <input clrInput type="text" [(ngModel)]="seccion.componentes[num].contenido.titulo" name="titulo" size="60">
                     </clr-input-container>
+                    <clr-input-container>
+                        <label>Opción del destacado</label>
+                        <input clrInput type="number" [(ngModel)]="seccion.componentes[num].contenido.opcion" name="opcion" size="2" min="0">
+                    </clr-input-container>
                 </form>
                 <quill-editor [modules]="configuracionEditor" format="html" [(ngModel)]="seccion.componentes[num].contenido.texto" [placeholder]="'Inserte texto'">
                 </quill-editor>
