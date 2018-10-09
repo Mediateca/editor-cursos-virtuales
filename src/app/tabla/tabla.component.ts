@@ -179,6 +179,23 @@ export class TablaComponent implements DoCheck, OnInit {
         }
         return tablaSalida;
     }
+    nuevaFila() {
+        this.tabla.contenido.body.contenido.push({
+            'fila': {
+                'abreFila': '<tr>',
+                'contenido': [
+                    {
+                        'celda': {
+                            'abreCelda': '<td colspan="1">',
+                            'contenido': '',
+                            'cierraCelda': '</td>'
+                        }
+                    }
+                ],
+                'cierraFila': '</tr>'
+            }
+        });
+    }
     ngDoCheck() {
         if (this.inicializado) {
             this.seccion.componentes[this.num].contenido.texto = this.produceTabla();

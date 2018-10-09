@@ -93,6 +93,7 @@ export class AppComponent {
     componenteActivo: any = this.contenido.branding;
     arrayComponentes: Array<any>;
     curso: AngularFirestoreDocument<any>;
+    nomCurso: string;
     tiempo: any;
     panelAbierto: string = 'abierto';
     togglePanel() {
@@ -121,6 +122,7 @@ export class AppComponent {
     }
     cambiaCurso(nomCurso:string) {
         let ruta: string = 'cursos/'+nomCurso;
+        this.nomCurso = nomCurso;
         this.curso = this.db.doc(ruta);
         this.curso.valueChanges().subscribe(data => {
             this.contenido = data;
@@ -204,7 +206,8 @@ export class AppComponent {
         }
     };
     eliminaComponente(componente: any, num: number){
-        componente.splice(num, 1);
+        componente.splice(num,1);
+        this.componenteActivo = this.contenido.branding;
         this.modalBorrar = {"activa":false};
     };
     nuevoComponente(seccion: any) {
@@ -240,7 +243,7 @@ export class AppComponent {
                 elemento.componentes.push({'tipo': tipo, 'contenido': {'texto':''}});
                 break;
             case 'media':
-                elemento.componentes.push({'tipo':'media','contenido':{'titulo':'','ruta':'https://farm4.staticflickr.com/3737/8857109703_65ec59bf27_z_d.jpg','pie':''}});
+                elemento.componentes.push({'tipo':'media','contenido':{'titulo':'','ruta':'','pie':'','ampliable':true,'origen':'local','nombre':''}});
                 break;
         }
         this.modalNew = {'activa':false};
