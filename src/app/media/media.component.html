@@ -1,0 +1,70 @@
+<h2>Componente Media en sección {{seccion.titulo?seccion.titulo:'sin nombre.'}}</h2>
+<clr-input-container>
+    <label>Título del media</label>
+    <input type="text" clrInput name="titulo" [(ngModel)]="seccion.componentes[num].contenido.titulo" size="60">
+</clr-input-container>
+<br>
+<div class="clr-row" *ngIf="!seccion.componentes[num].contenido.ruta">
+    <div class="clr-col">
+        <div class="btn-group">
+            <div class="radio btn">
+                <input type="radio" name="origen-media" id="btn-local" value="local" [(ngModel)]="origen">
+                <label for="btn-local"><clr-icon shape="computer"></clr-icon> Desde mi equipo local</label>
+            </div>
+            <div class="radio btn">
+                <input type="radio" name="origen-media" id="btn-url" value="url" [(ngModel)]="origen">
+                <label for="btn-url"><clr-icon shape="network-globe"></clr-icon> Desde una URL en internet</label>
+            </div>
+        </div>
+        <div [ngSwitch]="origen" class="origen">
+            <div class="local" *ngSwitchCase="'local'">
+                <file-drop customstyle="zona-drop" (onFileDrop)="validaArchivo($event,true)">
+                    <clr-icon shape="upload-cloud" size="72"></clr-icon>
+                    <span class="instrucciones">Arrastre y suelte el archivo en esta zona o</span>
+                    <label for="origen-local">
+                        <div class="btn">cárguelo desde su computador</div>
+                    </label>
+                    <input type="file" (change)="validaArchivo($event,false)" id="origen-local">
+                </file-drop>
+            </div>
+            <form clrForm *ngSwitchCase="'url'">
+                <clr-input-container>
+                    <label>URL del archivo multimedia</label>
+                    <input type="url" clrInput name="origen-url" [(ngModel)]="ruta" size="60" required>
+                    <clr-control-helper>Copie y pegue la ruta URL del archivo</clr-control-helper>
+                    <clr-control-error>Debe ingresar una URL válida</clr-control-error>
+                </clr-input-container>
+                <br>
+                <button class="btn" (click)="validaURL()" [disabled]="!ruta">
+                    <clr-icon shape="check"></clr-icon>
+                    Validar URL
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="clr-col-4" *ngIf="mediaCargada">
+        <img class="img-prevista" [src]="srcImagen | sanitizeHtml: 'url'" (error)="errorImagen($event)">
+        <button class="btn btn-primary btn-block" (click)="confirmarCarga()" [disabled]="!imagenValida">
+            <clr-icon shape="upload"></clr-icon>
+            Cargar
+        </button>
+    </div>
+</div><!-- /.clr-row -->
+<div class="clr-row" *ngIf="seccion.componentes[num].contenido.ruta">
+    <div class="clr-col">
+        <img class="img-prevista" [src]="seccion.componentes[num].contenido.ruta | sanitizeHtml: 'url'" (error)="errorImagen($event)">
+        <button class="btn btn-danger btn-block" (click)="eliminaImagen()">
+            <clr-icon shape="trash"></clr-icon>
+            Eliminar esta imagen
+        </button>
+    </div>
+    <div class="clr-col-4"></div>
+</div><!-- /.clr-row -->
+<clr-input-container>
+    <label>Pie del media</label>
+    <input type="text" clrInput name="pie" [(ngModel)]="seccion.componentes[num].contenido.pie" size="60" [disabled]="!conPie">
+</clr-input-container>
+<div class="toggle-switch">
+    <input type="checkbox" id="toggle-pie" checked [(ngModel)]="conPie" (change)="asignaPie(conPie)">
+    <label for="toggle-pie">Con pie de media.</label>
+</div>

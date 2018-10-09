@@ -1,46 +1,59 @@
-import { Component} from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/storage';
+import { UploadEvent, UploadFile } from 'ngx-file-drop';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-media',
-    template: `
-                <h2>Componente Media en sección {{'sección sin nombre'}}</h2>
-                <div class="clr-row">
-                    <div class="btn-group">
-                        <div class="radio btn">
-                            <input type="radio" name="origen-media" id="btn-local" value="local" [(ngModel)]="origen">
-                            <label for="btn-local"><clr-icon shape="computer"></clr-icon> Desde mi equipo local</label>
-                        </div>
-                        <div class="radio btn">
-                            <input type="radio" name="origen-media" id="btn-url" value="url" [(ngModel)]="origen">
-                            <label for="btn-url"><clr-icon shape="network-globe"></clr-icon> Desde una URL en internet</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="clr-row">
-                    <div [ngSwitch]="origen">
-                        <div *ngSwitchCase="'local'">
-                            <label for="origen-local">Cargue el archivo multimedia desde su computador</label>
-                            <input type="file" (change)="uploadFile($event)" id="origen-local">
-                        </div>
-                        <form class="clr-form clr-form-horizontal" *ngSwitchCase="'url'">
-                            <clr-input-container>
-                                <label>URL del archivo multimedia</label>
-                                <input clrInput placeholder="Escriba la ruta URL" name="ruta-url" [(ngModel)]="ruta">
-                            </clr-input-container>
-                        </form>
-                    </div>
-                </div>
-            `,
-    styles: []
+    templateUrl: './media.component.html',
+    styles: [`.img-prevista{max-width:100%;height:auto;}`]
 })
 export class MediaComponent {
+    @Input() seccion: any;
+    @Input() num: number;
     origen: string = 'local';
     ruta: string;
-    constructor(private storage: AngularFireStorage) {}
-    uploadFile(event) {
-        const file = event.target.files[0];
-        const filePath = 'name-your-file-path-here';
-        const task = this.storage.upload(filePath, file);
+    tipos:Array<string> = ['image/jpeg','image/png','image/svg+xml','audio/mpeg','video/mp4'];
+    mediaCargada:boolean = false;
+    archivoMedia:File;
+    imagenValida:boolean = true;
+    conPie:boolean = true;
+    srcImagen:string;
+    constructor(private storage: AngularFireStorage, private http:HttpClient) {}
+    validaArchivo(ev,drop:boolean) {
+        if (drop) {
+            ev.files[0].fileEntry.file((file:File)=>{this.cargaArchivo(file)});
+        } else {
+            this.cargaArchivo(ev.target.files[0]);
+        }
+    }
+    cargaArchivo(archivo:File) {
+        if (this.tipos.find((e)=>{return e == archivo.type})) {
+            //this.seccion.componentes[this.num].contenido.ruta = URL.createObjectURL(archivo);
+            this.srcImagen = URL.createObjectURL(archivo);
+            this.mediaCargada = true;
+            this.archivoMedia = archivo;
+            this.ruta = '';
+            //document.getElementById('img-prevista').onload(()=>{URL.revokeObjectURL(archivo)});
+            //const filePath = 'name-your-file-path-here';
+            //const task = this.storage.upload(filePath, archivo);
+        }
+    }
+    validaURL() {
+        this.http.get(this.ruta, {responseType: 'blob'}).subscribe((archivo)=>{
+            if (this.tipos.find((e)=>{return e == archivo.type})) {
+                this.archivoMedia = null;
+                //this.seccion.componentes[this.num].contenido.ruta = this.ruta;
+                this.srcImagen = this.ruta;
+                this.mediaCargada = true;
+            }
+        });
+    }
+    errorImagen(ev) {
+        this.imagenValida = false;
+        console.log('Error',ev);
+    }
+    asignaPie(pie:boolean) {
+        this.seccion.componentes[this.num].contenido.pie = pie?this.seccion.componentes[this.num].contenido.pie:'';
     }
 }

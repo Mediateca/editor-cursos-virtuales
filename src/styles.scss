@@ -1,2 +1,28 @@
 // ng2-dragula
 @import "./ng2-dragula.scss";
+// Componente app-media
+app-media {
+    .origen {
+        width: 100%;
+        .local {
+            file-drop {
+                .zona-drop {
+                    height: 200px;
+                    border: 2px dotted #0782d0;
+                    border-radius: .2rem;
+                    .content {
+                        height: 100%;
+                        width: 100%;
+                        flex-direction: column;
+                        .instrucciones {
+                            margin-bottom: 1rem;
+                        }
+                        input[type=file]#origen-local {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

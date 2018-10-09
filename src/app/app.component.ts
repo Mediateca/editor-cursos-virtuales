@@ -60,7 +60,8 @@ export class AppComponent {
         'texto-plano': {'icono':'text', 'nombre': 'Texto'},
         'destacado': {'icono':'tag', 'nombre': 'Destacado'},
         'recuerda': {'icono':'pinboard', 'nombre': 'Recuerda'},
-        'tabla': {'icono':'grid-view', 'nombre': 'Tabla'}
+        'tabla': {'icono':'grid-view', 'nombre': 'Tabla'},
+        'media': {'icono':'image', 'nombre': 'Media'}
     };
     contenido: any = {
         "branding": {
@@ -237,6 +238,9 @@ export class AppComponent {
                 break;
             case 'tabla':
                 elemento.componentes.push({'tipo': tipo, 'contenido': {'texto':''}});
+                break;
+            case 'media':
+                elemento.componentes.push({'tipo':'media','contenido':{'titulo':'','ruta':'https://farm4.staticflickr.com/3737/8857109703_65ec59bf27_z_d.jpg','pie':''}});
                 break;
         }
         this.modalNew = {'activa':false};

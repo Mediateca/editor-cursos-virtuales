@@ -223,7 +223,6 @@
                     </button>
                 </div><!-- /.clr-col-5 -->
                 <div class="clr-col">
-                    <app-media></app-media>
                     {{contenido | json}}
                     <div [ngSwitch]="componenteActivo">
                         <app-branding [branding]="contenido.branding" *ngSwitchCase="contenido.branding">
@@ -263,6 +262,10 @@
                                    [num]="numComponente"
                                    *ngSwitchCase="'tabla'">
                         </app-tabla>
+                        <app-media [seccion]="editandoSeccion"
+                                   [num]="numComponente"
+                                   *ngSwitchCase="'media'">
+                        </app-media>
                     </div>
                 </div>
             </div><!-- /.clr-row -->
