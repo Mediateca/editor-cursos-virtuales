@@ -61,28 +61,29 @@ export class AppComponent {
         'destacado': {'icono':'tag', 'nombre': 'Destacado'},
         'recuerda': {'icono':'pinboard', 'nombre': 'Recuerda'},
         'tabla': {'icono':'grid-view', 'nombre': 'Tabla'},
-        'media': {'icono':'image', 'nombre': 'Media'}
+        'media': {'icono':'image', 'nombre': 'Media'},
+        'contenedores': {'icono':'mouse', 'nombre': 'Contenedores'}
     };
     contenido: any = {
-        "branding": {
-            "tituloLargo": "",
-            "tituloCorto": "",
-            "colorPrimario": 1,
-            "nombreCurso": "",
+        'branding': {
+            'tituloLargo': '',
+            'tituloCorto': '',
+            'colorPrimario': 1,
+            'nombreCurso': '',
             'nombreCursoCorto': ''
         },
-        "modulos": [
+        'modulos': [
             {
-                "titulo": "",
-                "intro": "",
-                "momentos": [
+                'titulo': '',
+                'intro': '',
+                'momentos': [
                     {
-                        "titulo": "",
-                        "intro": "",
-                        "secciones": [
+                        'titulo': '',
+                        'intro': '',
+                        'secciones': [
                             {
-                                "titulo": "",
-                                "componentes": []
+                                'titulo': '',
+                                'componentes': []
                             }
                         ]
                     }
@@ -194,41 +195,41 @@ export class AppComponent {
     };
     intentaEliminarComponente(componente: any, num: number, titulo: string = undefined) {
         if (!titulo) {
-            let titulo: string = componente[num].titulo?componente[num].titulo:"componente sin nombre";
+            let titulo: string = componente[num].titulo?componente[num].titulo:'componente sin nombre';
         }
         this.modalBorrar = {
-            "titulo": "Esta acción borrará "+titulo+".",
-            "texto": "¿Está seguro de eliminar "+titulo+"? Esta acción es irreversible.",
-            "textoAccion": "Eliminar el componente",
-            "componente": componente,
-            "num": num,
-            "activa": true
+            'titulo': 'Esta acción borrará '+titulo+'.',
+            'texto': '¿Está seguro de eliminar '+titulo+'? Esta acción es irreversible.',
+            'textoAccion': 'Eliminar el componente',
+            'componente': componente,
+            'num': num,
+            'activa': true
         }
     };
     eliminaComponente(componente: any, num: number){
         componente.splice(num,1);
         this.componenteActivo = this.contenido.branding;
-        this.modalBorrar = {"activa":false};
+        this.modalBorrar = {'activa':false};
     };
     nuevoComponente(seccion: any) {
         this.modalNew = {
-            "titulo": "Crear un nuevo componente de contenido",
-            "texto": "Seleccione el tipo de componente que quiere construir.",
-            "textoAccion": "Crear componente",
-            "seccion": seccion,
-            "activa": true
+            'titulo': 'Crear un nuevo componente de contenido',
+            'texto': 'Seleccione el tipo de componente que quiere construir.',
+            'textoAccion': 'Crear componente',
+            'seccion': seccion,
+            'activa': true
         }
     }
     nuevoElemento(elemento:any,tipo:string) {
         switch(tipo) {
             case 'modulo':
-                elemento.push({"titulo":"","intro":"","momentos":[{"titulo":"","intro":"","secciones":[{"titulo":"","componentes":[]}]}]});
+                elemento.push({'titulo':'','intro':'','momentos':[{'titulo':'','intro':'','secciones':[{'titulo':'','componentes':[]}]}]});
                 break;
             case 'momento':
-                elemento.push({"titulo":"","intro":"","secciones":[{"titulo":"","componentes":[]}]});
+                elemento.push({'titulo':'','intro':'','secciones':[{'titulo':'','componentes':[]}]});
                 break;
             case 'seccion':
-                elemento.push({"titulo":"","componentes":[]});
+                elemento.push({'titulo':'','componentes':[]});
                 break;
             case 'texto-plano':
                 elemento.componentes.push({'tipo': tipo, 'contenido': {'texto':''}});
@@ -244,6 +245,9 @@ export class AppComponent {
                 break;
             case 'media':
                 elemento.componentes.push({'tipo':'media','contenido':{'titulo':'','ruta':'','pie':'','ampliable':true,'origen':'local','nombre':''}});
+                break;
+            case 'contenedores':
+                elemento.componentes.push({'tipo':'contenedores','contenido':{'titulo':'','texto':'','vertical':true,'contenedores':[{'texto':'','ruta':'','origen':'local','nombre':''}],'contenidos':[{'texto':'','ruta':'','origen':'local','nombre':'','contenedor':0}]}});
                 break;
         }
         this.modalNew = {'activa':false};

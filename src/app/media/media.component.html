@@ -1,95 +1,20 @@
-<h2>Componente Media en sección {{seccion.titulo?seccion.titulo:'sin nombre.'}}</h2>
-<clr-input-container>
-    <label>Título del multimedia</label>
-    <input type="text" clrInput name="titulo" [(ngModel)]="seccion.componentes[num]?.contenido.titulo" size="60">
-</clr-input-container>
-<div class="toggle-switch">
-    <input type="checkbox" id="toggle-ampliable" [(ngModel)]="seccion.componentes[num]?.contenido.ampliable">
-    <label for="toggle-ampliable">Multimedia ampliable</label>
+<h1>Componente Media en sección {{seccion.titulo?seccion.titulo:'sin nombre.'}}</h1>
+<div class="contenedor-form">
+    <clr-input-container>
+        <label>Título del multimedia</label>
+        <input type="text" clrInput name="titulo" [(ngModel)]="seccion.componentes[num].contenido.titulo" size="60">
+    </clr-input-container>
+    <div class="toggle-switch">
+        <input type="checkbox" id="toggle-ampliable" [(ngModel)]="seccion.componentes[num].contenido.ampliable">
+        <label for="toggle-ampliable">Multimedia ampliable</label>
+    </div>
+    <app-carga-imagen [contenido]="seccion.componentes[num].contenido" [nomCurso]="nomCurso"></app-carga-imagen>
+    <clr-input-container>
+        <label>Pie del multimedia</label>
+        <input type="text" clrInput name="pie" [(ngModel)]="seccion.componentes[num].contenido.pie" size="60" [disabled]="!conPie">
+    </clr-input-container>
+    <div class="toggle-switch">
+        <input type="checkbox" id="toggle-pie" checked [(ngModel)]="conPie" (change)="asignaPie(conPie)">
+        <label for="toggle-pie">Multimedia con pie</label>
+    </div>
 </div>
-<div class="clr-row" *ngIf="!seccion.componentes[num]?.contenido.ruta">
-    <div class="clr-col" *ngIf="!mediaCargada">
-        <div class="btn-group">
-            <div class="radio btn">
-                <input type="radio" name="origen-media" id="btn-local" value="local" [(ngModel)]="seccion.componentes[num]?.contenido.origen">
-                <label for="btn-local"><clr-icon shape="computer"></clr-icon> Desde mi equipo local</label>
-            </div>
-            <div class="radio btn">
-                <input type="radio" name="origen-media" id="btn-url" value="url" [(ngModel)]="seccion.componentes[num]?.contenido.origen">
-                <label for="btn-url"><clr-icon shape="network-globe"></clr-icon> Desde una URL en internet</label>
-            </div>
-        </div>
-        <div [ngSwitch]="seccion.componentes[num]?.contenido.origen" class="origen">
-            <div class="local" *ngSwitchCase="'local'">
-                <file-drop customstyle="zona-drop" (onFileDrop)="validaArchivo($event,true)">
-                    <clr-icon shape="upload-cloud" size="72"></clr-icon>
-                    <span class="instrucciones">Arrastre y suelte el archivo en esta zona o</span>
-                    <label for="origen-local">
-                        <div class="btn">cárguelo desde su computador</div>
-                    </label>
-                    <input type="file" (change)="validaArchivo($event,false)" id="origen-local">
-                </file-drop>
-            </div>
-            <form clrForm *ngSwitchCase="'url'">
-                <clr-input-container>
-                    <label>URL del archivo multimedia</label>
-                    <input type="url" clrInput name="origen-url" [(ngModel)]="ruta" size="60" required>
-                    <clr-control-helper>Copie y pegue la ruta URL del archivo</clr-control-helper>
-                    <clr-control-error>Debe ingresar una URL válida</clr-control-error>
-                </clr-input-container>
-                <br>
-                <button class="btn" (click)="validaURL()" [disabled]="!ruta">
-                    <clr-icon shape="check"></clr-icon>
-                    Validar URL
-                </button>
-            </form>
-        </div>
-    </div><!-- /.clr-col -->
-    <div class="clr-col-6" *ngIf="mediaCargada">
-        <img class="img-prevista" [src]="srcImagen | sanitizeHtml: 'url'" (error)="errorImagen($event)">
-        <div class="progress flash progress-fade " *ngIf="barraCarga">
-            <progress max="100" value="{{progresoCarga | async}}" data-displayval="0%"></progress>
-        </div>
-        <div class="btn-group btn-outline-primary">
-            <button class="btn" (click)="confirmarCarga()" [disabled]="!imagenValida">
-                <clr-icon shape="upload"></clr-icon>
-                Cargar
-            </button>
-            <button class="btn btn-danger" (click)="eliminaMedia()">
-                <clr-icon shape="trash"></clr-icon>
-                Eliminar
-            </button>
-        </div>
-    </div><!-- /.clr-col -->
-</div><!-- /.clr-row -->
-<div class="clr-row" *ngIf="seccion.componentes[num]?.contenido.ruta">
-    <div class="clr-col">
-        <img class="img-prevista" [src]="seccion.componentes[num]?.contenido.ruta | sanitizeHtml: 'url'" (error)="errorImagen($event)">
-        <button class="btn btn-danger btn-block" (click)="eliminaMedia()">
-            <clr-icon shape="trash"></clr-icon>
-            Eliminar este multimedia
-        </button>
-    </div>
-    <div class="clr-col-4"></div>
-</div><!-- /.clr-row -->
-<clr-input-container>
-    <label>Pie del multimedia</label>
-    <input type="text" clrInput name="pie" [(ngModel)]="seccion.componentes[num]?.contenido.pie" size="60" [disabled]="!conPie">
-</clr-input-container>
-<div class="toggle-switch">
-    <input type="checkbox" id="toggle-pie" checked [(ngModel)]="conPie" (change)="asignaPie(conPie)">
-    <label for="toggle-pie">Multimedia con pie</label>
-</div>
-<clr-modal [(clrModalOpen)]="modalVerificar.estado" [clrModalSize]="'md'">
-    <h3 class="modal-title">{{modalVerificar.titulo}}</h3>
-    <div class="modal-body">
-        <div [innerHTML]="modalVerificar.texto | sanitizeHtml: 'html'"></div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="modalVerificar.accion()">
-            <clr-icon [attr.shape]="modalVerificar.iconoAccion"></clr-icon>
-            {{modalVerificar.textoAccion}}
-        </button>
-        <button type="button" class="btn btn-outline" (click)="modalVerificar.cerrar()">{{modalVerificar.textoCierre}}</button>
-    </div>
-</clr-modal>

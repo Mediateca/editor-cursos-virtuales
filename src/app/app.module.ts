@@ -25,6 +25,8 @@ import { SanitizeHtmlPipe } from './sanitize-html.pipe';
 import { TheaderComponent } from './tabla/theader/theader.component';
 import { TbodyComponent } from './tabla/tbody/tbody.component';
 import { MediaComponent } from './media/media.component';
+import { ContenedoresComponent } from './contenedores/contenedores.component';
+import { CargaImagenComponent } from './carga-imagen/carga-imagen.component';
 
 @NgModule({
     declarations: [
@@ -41,7 +43,9 @@ import { MediaComponent } from './media/media.component';
         SanitizeHtmlPipe,
         TheaderComponent,
         TbodyComponent,
-        MediaComponent
+        MediaComponent,
+        ContenedoresComponent,
+        CargaImagenComponent
     ],
     imports: [
         BrowserModule,

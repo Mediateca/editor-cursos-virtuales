@@ -1,0 +1,79 @@
+<div class="clr-row" *ngIf="!contenido.ruta">
+    <div class="clr-col" *ngIf="!mediaCargada">
+        <clr-radio-container clrInline>
+            <label>Origen del multimedia</label>
+            <clr-radio-wrapper>
+                <input type="radio" clrRadio name="{{nombreRadio}}" value="local" required [(ngModel)]="contenido.origen">
+                <label>Desde el computador</label>
+            </clr-radio-wrapper>
+            <clr-radio-wrapper>
+                <input type="radio" clrRadio name="{{nombreRadio}}" value="url" required [(ngModel)]="contenido.origen">
+                <label>Desde una URL</label>
+            </clr-radio-wrapper>
+        </clr-radio-container>
+        <div [ngSwitch]="contenido.origen" class="origen">
+            <div class="local" *ngSwitchCase="'local'">
+                <file-drop customstyle="zona-drop" (onFileDrop)="validaArchivo($event,true)">
+                    <clr-icon shape="upload-cloud" size="72"></clr-icon>
+                    <span class="instrucciones">Arrastre y suelte el archivo en esta zona o</span>
+                    <label for="origen-local">
+                        <div class="btn">cárguelo desde su computador</div>
+                    </label>
+                    <input type="file" (change)="validaArchivo($event,false)" id="origen-local">
+                </file-drop>
+            </div>
+            <form clrForm *ngSwitchCase="'url'">
+                <clr-input-container>
+                    <label>URL del archivo multimedia</label>
+                    <input type="url" clrInput name="origen-url" [(ngModel)]="ruta" required>
+                    <clr-control-helper>Copie y pegue la ruta URL del archivo</clr-control-helper>
+                    <clr-control-error>Debe ingresar una URL válida</clr-control-error>
+                </clr-input-container>
+                <br>
+                <button class="btn" (click)="validaURL()" [disabled]="!ruta">
+                    <clr-icon shape="check"></clr-icon>
+                    Validar URL
+                </button>
+            </form>
+        </div>
+    </div><!-- /.clr-col -->
+    <div class="clr-col" *ngIf="mediaCargada">
+        <img class="img-prevista" [src]="srcImagen | sanitizeHtml: 'url'" (error)="errorImagen($event)">
+        <div class="progress flash progress-fade" *ngIf="barraCarga">
+            <progress max="100" value="{{progresoCarga | async}}" data-displayval="0%"></progress>
+        </div>
+        <div class="btn-group btn-outline-primary">
+            <button class="btn" (click)="confirmarCarga()" [disabled]="!imagenValida">
+                <clr-icon shape="upload"></clr-icon>
+                Cargar
+            </button>
+            <button class="btn btn-danger" (click)="eliminaMedia()">
+                <clr-icon shape="trash"></clr-icon>
+                Eliminar
+            </button>
+        </div>
+    </div><!-- /.clr-col -->
+</div><!-- /.clr-row -->
+<div class="clr-row" *ngIf="contenido.ruta">
+    <div class="clr-col">
+        <img class="img-prevista" [src]="contenido.ruta | sanitizeHtml: 'url'" (error)="errorImagen($event)">
+        <button class="btn btn-danger btn-block" (click)="eliminaMedia()">
+            <clr-icon shape="trash"></clr-icon>
+            Eliminar este multimedia
+        </button>
+    </div>
+    <div class="clr-col-4"></div>
+</div><!-- /.clr-row -->
+<clr-modal [(clrModalOpen)]="modalVerificar.estado" [clrModalSize]="'md'">
+    <h3 class="modal-title">{{modalVerificar.titulo}}</h3>
+    <div class="modal-body">
+        <div [innerHTML]="modalVerificar.texto | sanitizeHtml: 'html'"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="modalVerificar.accion()">
+            <clr-icon [attr.shape]="modalVerificar.iconoAccion"></clr-icon>
+            {{modalVerificar.textoAccion}}
+        </button>
+        <button type="button" class="btn btn-outline" (click)="modalVerificar.cerrar()">{{modalVerificar.textoCierre}}</button>
+    </div>
+</clr-modal>

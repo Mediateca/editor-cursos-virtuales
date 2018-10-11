@@ -267,6 +267,12 @@
                                    [nomCurso]="nomCurso"
                                    *ngSwitchCase="'media'">
                         </app-media>
+                        <app-contenedores [configuracionEditor]="configuracionEditor"
+                                          [seccion]="editandoSeccion"
+                                          [num]="numComponente"
+                                          [nomCurso]="nomCurso"
+                                          *ngSwitchCase="'contenedores'">
+                        </app-contenedores>
                     </div>
                 </div>
             </div><!-- /.clr-row -->

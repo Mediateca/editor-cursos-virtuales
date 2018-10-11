@@ -1,0 +1,27 @@
+<h1>Componente Contenedores en sección {{seccion?.titulo?seccion.titulo:'sin nombre.'}}</h1>
+<h2>
+    Contenedores
+    <clr-tooltip *ngIf="seccion?.componentes[num].contenido.contenedores.length < 7">
+        <button clrTooltipTrigger class="btn btn-link btn-icon" (click)="nuevoContenedor()">
+            <clr-icon shape="plus-circle"></clr-icon>
+        </button>
+        <clr-tooltip-content clrPosition="top-right" clrSize="sm" *clrIfOpen>
+            <span>Nuevo contenedor</span>
+        </clr-tooltip-content>
+    </clr-tooltip>
+</h2>
+<div class="clr-row">
+    <div class="clr-col-md-6 clr-col-12" *ngFor="let contenedor of seccion?.componentes[num].contenido.contenedores; index as i; first as inicial">
+        <div class="card">
+            <div class="card-header">
+                Contenedor <span class="badge badge-info">{{i+1}}</span>
+            </div>
+            <div class="card-block">
+                <app-carga-imagen [contenido]="contenedor" [nomCurso]="nomCurso"></app-carga-imagen>
+                <quill-editor [modules]="configuracionEditor" format="html" [(ngModel)]="contenedor.texto" [placeholder]="''">
+                </quill-editor>
+            </div>
+            <div class="card-footer"></div>
+        </div><!-- /.card -->
+    </div><!-- /.clr-col -->
+</div><!-- /.clr-row -->
