@@ -27,6 +27,7 @@ import { TbodyComponent } from './tabla/tbody/tbody.component';
 import { MediaComponent } from './media/media.component';
 import { ContenedoresComponent } from './contenedores/contenedores.component';
 import { CargaImagenComponent } from './carga-imagen/carga-imagen.component';
+import { BlockCardComponent } from './block-card/block-card.component';
 
 @NgModule({
     declarations: [
@@ -45,7 +46,8 @@ import { CargaImagenComponent } from './carga-imagen/carga-imagen.component';
         TbodyComponent,
         MediaComponent,
         ContenedoresComponent,
-        CargaImagenComponent
+        CargaImagenComponent,
+        BlockCardComponent
     ],
     imports: [
         BrowserModule,

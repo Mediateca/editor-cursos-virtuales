@@ -247,7 +247,7 @@ export class AppComponent {
                 elemento.componentes.push({'tipo':'media','contenido':{'titulo':'','ruta':'','pie':'','ampliable':true,'origen':'local','nombre':''}});
                 break;
             case 'contenedores':
-                elemento.componentes.push({'tipo':'contenedores','contenido':{'titulo':'','texto':'','vertical':true,'contenedores':[{'texto':'','ruta':'','origen':'local','nombre':''}],'contenidos':[{'texto':'','ruta':'','origen':'local','nombre':'','contenedor':0}]}});
+                elemento.componentes.push({'tipo':'contenedores','contenido':{'titulo':'','texto':'','vertical':true,'contenedores':[{'titulo':'','texto':''}],'contenidos':[{'titulo':'','texto':'','contenedor':0}]}});
                 break;
         }
         this.modalNew = {'activa':false};
