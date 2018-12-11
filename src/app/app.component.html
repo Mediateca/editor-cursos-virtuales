@@ -222,7 +222,8 @@
                         <clr-icon class="icono" shape="caret" [@animIcono]="panelAbierto"></clr-icon>
                     </button>
                 </div><!-- /.clr-col-5 -->
-                <div class="clr-col">
+                <div class="clr-col" id="colContenido">
+                    Ancho: {{ancho}}<br>
                     {{contenido | json}}
                     <div [ngSwitch]="componenteActivo">
                         <app-branding [branding]="contenido.branding" *ngSwitchCase="contenido.branding">
@@ -271,6 +272,7 @@
                                           [seccion]="editandoSeccion"
                                           [num]="numComponente"
                                           [nomCurso]="nomCurso"
+                                          [ancho]="ancho"
                                           *ngSwitchCase="'contenedores'">
                         </app-contenedores>
                     </div>

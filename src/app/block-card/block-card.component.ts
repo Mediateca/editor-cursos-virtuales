@@ -30,9 +30,10 @@ import { Component, Input } from '@angular/core';
 })
 export class BlockCardComponent {
     @Input() elemento: any;
+    @Input() configuracionEditor: any;
     constructor() {}
     nuevoMedia() {
-        this.elemento.media = {'ruta':'','origen':'local','nombre':''};
+        this.elemento.media = {'ruta':'','origen':'local','nombre':'','style':''};
     }
     eliminaMedia() {
         delete this.elemento.media;

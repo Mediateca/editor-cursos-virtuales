@@ -38,7 +38,17 @@
         </div>
     </div><!-- /.clr-col -->
     <div class="clr-col" *ngIf="mediaCargada">
-        <img class="img-prevista" [src]="srcImagen | sanitizeHtml: 'url'" (error)="errorImagen($event)">
+        <div class="btn-group botones-giro btn-outline btn-icon">
+            <clr-tooltip>
+                <button clrTooltipTrigger class="btn" (click)="giraImg()">
+                    <clr-icon shape="redo"></clr-icon>
+                </button>
+                <clr-tooltip-content clrPosition="top-left" clrSize="sm" *clrIfOpen>
+                    <span>Rotar imagen</span>
+                </clr-tooltip-content>
+            </clr-tooltip>
+        </div>
+        <img class="img-prevista" [src]="srcImagen | sanitizeHtml: 'url'" (error)="errorImagen($event)" [ngStyle]="contenido.style">
         <div class="progress flash progress-fade" *ngIf="barraCarga">
             <progress max="100" value="{{progresoCarga | async}}" data-displayval="0%"></progress>
         </div>
@@ -56,7 +66,17 @@
 </div><!-- /.clr-row -->
 <div class="clr-row" *ngIf="contenido.ruta">
     <div class="clr-col">
-        <img class="img-prevista" [src]="contenido.ruta | sanitizeHtml: 'url'" (error)="errorImagen($event)">
+        <div class="btn-group botones-giro btn-outline btn-icon">
+            <clr-tooltip>
+                <button clrTooltipTrigger class="btn" (click)="giraImg()">
+                    <clr-icon shape="redo"></clr-icon>
+                </button>
+                <clr-tooltip-content clrPosition="top-right" clrSize="sm" *clrIfOpen>
+                    <span>Rotar imagen</span>
+                </clr-tooltip-content>
+            </clr-tooltip>
+        </div>
+        <img class="img-prevista" [src]="contenido.ruta | sanitizeHtml: 'url'" (error)="errorImagen($event)" [ngStyle]="contenido.style">
         <button class="btn btn-danger btn-block" (click)="eliminaMedia()">
             <clr-icon shape="trash"></clr-icon>
             Eliminar este multimedia

@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { DragulaService } from 'ng2-dragula';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
@@ -48,7 +48,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
         ])
     ]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     categorias: Array<any> =[
         {'name':'MODULOS','class':'drag-modulo'},
         {'name':'MOMENTOS','class':'drag-momento'},
@@ -97,8 +97,17 @@ export class AppComponent {
     nomCurso: string;
     tiempo: any;
     panelAbierto: string = 'abierto';
+    ancho: Number;
     togglePanel() {
         this.panelAbierto = this.panelAbierto == 'abierto'?'cerrado':'abierto';
+        window.setTimeout(()=>{
+            this.ancho = document.getElementById('colContenido').offsetWidth;
+        }, 600);
+    }
+    ngOnInit() {
+        window.setTimeout(()=>{
+            this.ancho = document.getElementById('colContenido').offsetWidth;
+        }, 600);
     }
     autoguardado: boolean = false; //-----------------------> Autoguardado
     guardado: boolean = true;
@@ -244,7 +253,7 @@ export class AppComponent {
                 elemento.componentes.push({'tipo': tipo, 'contenido': {'texto':''}});
                 break;
             case 'media':
-                elemento.componentes.push({'tipo':'media','contenido':{'titulo':'','ruta':'','pie':'','ampliable':true,'origen':'local','nombre':''}});
+                elemento.componentes.push({'tipo':'media','contenido':{'titulo':'','ruta':'','pie':'','ampliable':true,'origen':'local','nombre':'','style':''}});
                 break;
             case 'contenedores':
                 elemento.componentes.push({'tipo':'contenedores','contenido':{'titulo':'','texto':'','vertical':true,'contenedores':[{'titulo':'','texto':''}],'contenidos':[{'titulo':'','texto':'','contenedor':0}]}});

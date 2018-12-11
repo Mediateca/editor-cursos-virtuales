@@ -22,6 +22,14 @@ import { finalize } from 'rxjs/operators';
                     height: 100%;
                     position: relative;
                 }
+                .botones-giro {
+                    position: absolute;
+                    right: 0.25rem;
+                    z-index: 1;
+                }
+                .botones-giro .btn {
+                    background-color: rgba(255,255,255,0.75);
+                }
             `]
 })
 export class CargaImagenComponent {
@@ -50,9 +58,10 @@ export class CargaImagenComponent {
             if (this.tipos.find((e)=>{return e == archivo.type})) {
                 this.archivoMedia = null;
                 this.srcImagen = this.ruta;
+                this.contenido.ruta = this.ruta;
                 this.mediaCargada = true;
-                //this.contenido[this.num].nombre = this.ruta.substring(this.ruta.lastIndexOf('/')+1);
                 this.contenido.nombre = this.ruta.substring(this.ruta.lastIndexOf('/')+1);
+                this.contenido.style = '';
             }
         });
     }
@@ -62,11 +71,11 @@ export class CargaImagenComponent {
             this.mediaCargada = true;
             this.archivoMedia = archivo;
             this.ruta = '';
+            this.contenido.style = '';
         }
     }
     confirmarCarga() {
         if(this.archivoMedia) {
-            //this.contenido[this.num].origen = 'local';
             this.contenido.origen = 'local';
             this.barraCarga = true;
             const filePath = this.nomCurso + '/medias/'+this.archivoMedia.name;
@@ -81,7 +90,7 @@ export class CargaImagenComponent {
                             this.progresoCarga = tareaCarga.percentageChanges();
                             tareaCarga.snapshotChanges().pipe(finalize(() => {
                                 fileRef.getDownloadURL().subscribe(data=>{
-                                    this.asignaValores(data,'local',this.archivoMedia.name);
+                                    this.asignaValores(data,'local',this.archivoMedia.name,'');
                                 });
                             })).subscribe();
                             this.modalVerificar.estado=false;
@@ -99,25 +108,20 @@ export class CargaImagenComponent {
                         this.progresoCarga = tareaCarga.percentageChanges();
                         tareaCarga.snapshotChanges().pipe(finalize(() => {
                             fileRef.getDownloadURL().subscribe(data=>{
-                                this.asignaValores(data,'local',this.archivoMedia.name);
+                                this.asignaValores(data,'local',this.archivoMedia.name,'');
                             });
                         })).subscribe();
                     }
                 });
         } else {
-            //this.contenido[this.num].ruta = this.ruta;
             this.contenido.ruta = this.ruta;
         }
     }
-    asignaValores(data:string,origen:string,nombre:string) {
-        /*
-        this.contenido[this.num].ruta = data;
-        this.contenido[this.num].origen = origen;
-        this.contenido[this.num].nombre = nombre;
-        */
+    asignaValores(data:string,origen:string,nombre:string,estilo:string) {
         this.contenido.ruta = data;
         this.contenido.origen = origen;
         this.contenido.nombre = nombre;
+        this.contenido.style = estilo;
         this.barraCarga = false;
     }
     errorImagen(ev) {
@@ -127,17 +131,35 @@ export class CargaImagenComponent {
     eliminaMedia() {
         switch (this.contenido.origen) {
             case 'local':
-                //const filePath = this.nomCurso + '/medias/'+this.contenido[this.num].nombre;
                 const filePath = this.nomCurso + '/medias/'+this.contenido.nombre;
                 const fileRef = this.storage.ref(filePath);
                 fileRef.delete();
-                this.asignaValores('','local','');
+                this.asignaValores('','local','','');
                 this.mediaCargada = false;
                 break;
             case 'url':
-                this.asignaValores('','local','');
+                this.asignaValores('','local','','');
                 this.mediaCargada = false;
                 break;
         }
+    }
+    giraImg() {
+        var angle:number;
+        var partIni:string = 'rotate(';
+        var partFin:string = 'deg)';
+        if (this.contenido.style && this.contenido.style.transform) {
+            var inicio:number = partIni.length;
+            var final:number = this.contenido.style.transform.indexOf(partFin);
+            angle = Number(this.contenido.style.transform.substr(inicio,final-inicio));
+        } else {
+            angle = 0;
+            if (this.contenido.style) {
+                this.contenido.style.transform = '';
+            } else {
+                this.contenido.style = {'transform':''};
+            }
+        }
+        angle = (angle + 90) % 360;
+        this.contenido.style.transform = partIni+String(angle)+partFin;
     }
 }

@@ -27,6 +27,7 @@ export class ContenedoresComponent {
     @Input() num: number;
     @Input() nomCurso: string;
     @Input() configuracionEditor: any;
+    @Input() ancho: number;
     nuevoContenedor() {
         this.seccion.componentes[this.num].contenido.contenedores.push({'titulo':'','texto':''});
     }

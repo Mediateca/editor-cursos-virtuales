@@ -1,5 +1,5 @@
 <h1>Componente Contenedores en sección {{seccion?.titulo?seccion.titulo:'sin nombre.'}}</h1>
-<form clrForm clrLayout="horizontal">
+<form clrForm clrLayout="horizontal" id="datosPrincipales">
     <clr-input-container>
         <label>Título del componente</label>
         <input clrInput type="text" [(ngModel)]="seccion.componentes[num].contenido.titulo" name="titulo" size="60">
@@ -38,13 +38,13 @@
     </clr-tooltip>
 </h2>
 <div class="clr-row">
-    <div class="clr-col-md-6 clr-col-12" *ngFor="let contenedor of seccion?.componentes[num].contenido.contenedores; index as i; first as inicial">
+    <div [ngClass]="{'clr-col-12': ancho < 640, 'clr-col-6': ancho > 639 && ancho < 1200, 'clr-col-4': ancho > 1199}" *ngFor="let contenedor of seccion?.componentes[num].contenido.contenedores; index as i; first as inicial">
         <div class="card">
             <div class="card-header">
                 Contenedor <span class="badge badge-info">{{i+1}}</span>
             </div>
             <div class="card-block">
-                <app-block-card [elemento]="contenedor"></app-block-card>
+                <app-block-card [elemento]="contenedor" [configuracionEditor]="configuracionEditor"></app-block-card>
             </div>
             <div class="card-footer"></div>
         </div><!-- /.card -->
@@ -62,7 +62,7 @@
     </clr-tooltip>
 </h2>
 <div class="clr-row">
-    <div class="clr-col-md-6 clr-col-12" *ngFor="let contenido of seccion?.componentes[num].contenido.contenidos; index as i; first as inicial">
+    <div [ngClass]="{'clr-col-12': ancho < 640, 'clr-col-6': ancho > 639 && ancho < 1200, 'clr-col-4': ancho > 1199}" *ngFor="let contenido of seccion?.componentes[num].contenido.contenidos; index as i; first as inicial">
         <div class="card">
             <div class="card-header">
                 Contenido <clr-icon shape="arrow right"></clr-icon>
@@ -75,10 +75,7 @@
                 </div>
             </div>
             <div class="card-block">
-                <app-block-card [elemento]="contenido"></app-block-card>
-                <!--app-carga-imagen [contenido]="contenido" [nomCurso]="nomCurso"></app-carga-imagen>
-                <quill-editor [modules]="configuracionEditor" format="html" [(ngModel)]="contenido.texto" [placeholder]="''">
-                </quill-editor-->
+                <app-block-card [elemento]="contenido" [configuracionEditor]="configuracionEditor"></app-block-card>
             </div>
             <div class="card-footer"></div>
         </div><!-- /.card -->
