@@ -38,7 +38,7 @@
         </div>
     </div><!-- /.clr-col -->
     <div class="clr-col" *ngIf="mediaCargada">
-        <div class="btn-group botones-giro btn-outline btn-icon">
+        <div class="btn-group botones-giro btn-outline btn-icon" *ngIf="tipoMedia=='img'">
             <clr-tooltip>
                 <button clrTooltipTrigger class="btn" (click)="giraImg()">
                     <clr-icon shape="redo"></clr-icon>
@@ -48,7 +48,13 @@
                 </clr-tooltip-content>
             </clr-tooltip>
         </div>
-        <img class="img-prevista" [src]="srcImagen | sanitizeHtml: 'url'" (error)="errorImagen($event)" [ngStyle]="contenido.style">
+        <div class="cont-media" [ngStyle]="estiloContMedia">
+            <img class="img-prevista" [src]="srcImagen | sanitizeHtml: 'url'" (error)="errorImagen($event)" [ngStyle]="contenido.style" *ngIf="tipoMedia=='img'" (load)="mediaCompleta()" [id]="contenido.nombre">
+            <video class="img-prevista" controls *ngIf="tipoMedia=='vid'" [ngStyle]="contenido.style" [id]="contenido.nombre">
+                <source [src]="srcImagen | sanitizeHtml: 'url'" type="{{contenido.tipo}}">
+            </video>
+            <audio controls [src]="srcImagen | sanitizeHtml: 'url'" *ngIf="tipoMedia=='aud'" [id]="contenido.nombre"></audio>
+        </div>
         <div class="progress flash progress-fade" *ngIf="barraCarga">
             <progress max="100" value="{{progresoCarga | async}}" data-displayval="0%"></progress>
         </div>
@@ -66,7 +72,7 @@
 </div><!-- /.clr-row -->
 <div class="clr-row" *ngIf="contenido.ruta">
     <div class="clr-col">
-        <div class="btn-group botones-giro btn-outline btn-icon">
+        <div class="btn-group botones-giro btn-outline btn-icon" *ngIf="tipoMediaTag(contenido.tipo)=='img'">
             <clr-tooltip>
                 <button clrTooltipTrigger class="btn" (click)="giraImg()">
                     <clr-icon shape="redo"></clr-icon>
@@ -76,7 +82,13 @@
                 </clr-tooltip-content>
             </clr-tooltip>
         </div>
-        <img class="img-prevista" [src]="contenido.ruta | sanitizeHtml: 'url'" (error)="errorImagen($event)" [ngStyle]="contenido.style">
+        <div class="cont-media" [ngStyle]="estiloContMedia">
+            <img class="img-prevista" [id]="contenido.nombre" [src]="contenido.ruta | sanitizeHtml: 'url'" (error)="errorImagen($event)" [ngStyle]="contenido.style" *ngIf="tipoMediaTag(contenido.tipo)=='img'" (load)="mediaCompleta()">
+            <video class="img-prevista" [id]="contenido.nombre" controls *ngIf="tipoMediaTag(contenido.tipo)=='vid'" [ngStyle]="contenido.style">
+                <source [src]="contenido.ruta | sanitizeHtml: 'url'" type="{{contenido.tipo}}">
+            </video>
+            <audio [id]="contenido.nombre" controls [src]="contenido.ruta | sanitizeHtml: 'url'" *ngIf="tipoMediaTag(contenido.tipo)=='aud'"></audio>
+        </div>
         <button class="btn btn-danger btn-block" (click)="eliminaMedia()">
             <clr-icon shape="trash"></clr-icon>
             Eliminar este multimedia

@@ -3,7 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { ClarityModule, ClrFormsNextModule } from '@clr/angular';
+import { ClarityModule } from '@clr/angular';
 import { QuillModule } from 'ngx-quill';
 import { DragulaModule } from 'ng2-dragula';
 import { AngularFireModule } from '@angular/fire';
@@ -52,7 +52,6 @@ import { BlockCardComponent } from './block-card/block-card.component';
     imports: [
         BrowserModule,
         ClarityModule,
-        ClrFormsNextModule,
         BrowserAnimationsModule,
         FormsModule,
         QuillModule,

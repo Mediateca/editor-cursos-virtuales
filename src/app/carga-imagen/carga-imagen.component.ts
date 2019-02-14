@@ -36,7 +36,10 @@ export class CargaImagenComponent {
     @Input() contenido: any;
     @Input() nomCurso: string;
     ruta:string;
-    tipos:Array<string> = ['image/jpeg','image/png','image/svg+xml','audio/mpeg','video/mp4'];
+    tipoImagenes:Array<string> = ['image/jpeg','image/png','image/svg+xml'];
+    tipoVideos:Array<string> = ['video/mp4'];
+    tipoAudios:Array<string> = ['audio/mpeg'];
+    tipos:Array<string> = this.tipoImagenes.concat(this.tipoVideos, this.tipoAudios);
     mediaCargada:boolean = false;
     archivoMedia:File;
     imagenValida:boolean = true;
@@ -45,6 +48,24 @@ export class CargaImagenComponent {
     progresoCarga:Observable<number>;
     modalVerificar:any = {'estado': false};
     nombreRadio:string = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    tipoMedia:string;
+    imagenMedia:any;
+    constK:number;
+    estiloContMedia:any;
+    mediaCompleta() {
+        this.imagenMedia = document.getElementById(this.contenido.nombre);
+        var angle:number;
+        var partIni:string = 'rotate(';
+        var partFin:string = 'deg)';
+        if (this.contenido.style && this.contenido.style.transform) {
+            var inicio:number = partIni.length;
+            var final:number = this.contenido.style.transform.indexOf(partFin);
+            angle = Number(this.contenido.style.transform.substr(inicio,final-inicio));
+        }
+        if (angle == 90 || angle == 270) {
+            this.estiloContMedia = {'min-height': String(this.imagenMedia.width)+'px'};
+        }
+    }
     constructor(private storage: AngularFireStorage, private http:HttpClient) {}
     validaArchivo(ev,drop:boolean) {
         if (drop) {
@@ -62,16 +83,32 @@ export class CargaImagenComponent {
                 this.mediaCargada = true;
                 this.contenido.nombre = this.ruta.substring(this.ruta.lastIndexOf('/')+1);
                 this.contenido.style = '';
+                this.contenido.tipo = archivo.type;
+                this.tipoMedia = this.tipoMediaTag(archivo.type);
             }
         });
+    }
+    tipoMediaTag(tipo:string):string {
+        var salida:string;
+        if (this.tipoImagenes.find((e)=>{return e == tipo})){
+            salida = 'img';
+        } else if (this.tipoVideos.find((e)=>{return e == tipo})){
+            salida = 'vid';
+        } else if (this.tipoAudios.find((e)=>{return e == tipo})){
+            salida = 'aud';
+        }
+        return salida;
     }
     cargaArchivo(archivo:File) {
         if (this.tipos.find((e)=>{return e == archivo.type})) {
             this.srcImagen = URL.createObjectURL(archivo);
             this.mediaCargada = true;
             this.archivoMedia = archivo;
+            this.contenido.nombre = archivo.name;
             this.ruta = '';
             this.contenido.style = '';
+            this.contenido.tipo = archivo.type;
+            this.tipoMedia = this.tipoMediaTag(archivo.type);
         }
     }
     confirmarCarga() {
@@ -90,7 +127,7 @@ export class CargaImagenComponent {
                             this.progresoCarga = tareaCarga.percentageChanges();
                             tareaCarga.snapshotChanges().pipe(finalize(() => {
                                 fileRef.getDownloadURL().subscribe(data=>{
-                                    this.asignaValores(data,'local',this.archivoMedia.name,'');
+                                    this.asignaValores(data,'local',this.archivoMedia.name,this.contenido.style,this.archivoMedia.type);
                                 });
                             })).subscribe();
                             this.modalVerificar.estado=false;
@@ -108,7 +145,7 @@ export class CargaImagenComponent {
                         this.progresoCarga = tareaCarga.percentageChanges();
                         tareaCarga.snapshotChanges().pipe(finalize(() => {
                             fileRef.getDownloadURL().subscribe(data=>{
-                                this.asignaValores(data,'local',this.archivoMedia.name,'');
+                                this.asignaValores(data,'local',this.archivoMedia.name,this.contenido.style,this.archivoMedia.type);
                             });
                         })).subscribe();
                     }
@@ -117,11 +154,12 @@ export class CargaImagenComponent {
             this.contenido.ruta = this.ruta;
         }
     }
-    asignaValores(data:string,origen:string,nombre:string,estilo:string) {
+    asignaValores(data:string,origen:string,nombre:string,estilo:string,tipo:string) {
         this.contenido.ruta = data;
         this.contenido.origen = origen;
         this.contenido.nombre = nombre;
         this.contenido.style = estilo;
+        this.contenido.tipo = tipo;
         this.barraCarga = false;
     }
     errorImagen(ev) {
@@ -134,11 +172,11 @@ export class CargaImagenComponent {
                 const filePath = this.nomCurso + '/medias/'+this.contenido.nombre;
                 const fileRef = this.storage.ref(filePath);
                 fileRef.delete();
-                this.asignaValores('','local','','');
+                this.asignaValores('','local','','','');
                 this.mediaCargada = false;
                 break;
             case 'url':
-                this.asignaValores('','local','','');
+                this.asignaValores('','local','','','');
                 this.mediaCargada = false;
                 break;
         }
@@ -147,6 +185,7 @@ export class CargaImagenComponent {
         var angle:number;
         var partIni:string = 'rotate(';
         var partFin:string = 'deg)';
+        var translate:string;
         if (this.contenido.style && this.contenido.style.transform) {
             var inicio:number = partIni.length;
             var final:number = this.contenido.style.transform.indexOf(partFin);
@@ -160,6 +199,23 @@ export class CargaImagenComponent {
             }
         }
         angle = (angle + 90) % 360;
-        this.contenido.style.transform = partIni+String(angle)+partFin;
+        switch (angle) {
+            case 90:
+                translate = ' translate(0, -100%)';
+                this.estiloContMedia = {'min-height': String(this.imagenMedia.width)+'px'};
+                break;
+            case 180:
+                translate = ' translate(-100%, -100%)';
+                this.estiloContMedia = null;
+                break;
+            case 270:
+                translate = ' translate(-100%, 0)';
+                this.estiloContMedia = {'min-height': String(this.imagenMedia.width)+'px'};
+                break;
+            default:
+                translate = '';
+        }
+        this.contenido.style.transform = partIni+String(angle)+partFin+translate;
+        this.contenido.style.transformOrigin = 'top left';
     }
 }
