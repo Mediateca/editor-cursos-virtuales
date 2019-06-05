@@ -13,14 +13,14 @@
         </clr-radio-container>
         <div [ngSwitch]="contenido.origen" class="origen">
             <div class="local" *ngSwitchCase="'local'">
-                <file-drop customstyle="zona-drop" (onFileDrop)="validaArchivo($event,true)">
+                <ngx-file-drop customstyle="zona-drop" (onFileDrop)="validaArchivo($event,true)">
                     <clr-icon shape="upload-cloud" size="72"></clr-icon>
                     <span class="instrucciones">Arrastre y suelte el archivo en esta zona o</span>
                     <label for="origen-local">
                         <div class="btn">cárguelo desde su computador</div>
                     </label>
                     <input type="file" (change)="validaArchivo($event,false)" id="origen-local">
-                </file-drop>
+                </ngx-file-drop>
             </div>
             <form clrForm *ngSwitchCase="'url'">
                 <clr-input-container>

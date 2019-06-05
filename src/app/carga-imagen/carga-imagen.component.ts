@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { UploadEvent, UploadFile } from 'ngx-file-drop';
+import { NgxFileDropEntry, FileSystemFileEntry, FileSystemDirectoryEntry } from 'ngx-file-drop';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';

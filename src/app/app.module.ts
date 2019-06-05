@@ -9,7 +9,7 @@ import { DragulaModule } from 'ng2-dragula';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
-import { FileDropModule } from 'ngx-file-drop';
+import { NgxFileDropModule } from 'ngx-file-drop';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { BrandingComponent } from './branding/branding.component';
@@ -60,7 +60,7 @@ import { BlockCardComponent } from './block-card/block-card.component';
         AngularFirestoreModule.enablePersistence(),
         AngularFireStorageModule,
         HttpClientModule,
-        FileDropModule
+        NgxFileDropModule
     ],
     providers: [],
     bootstrap: [AppComponent]
