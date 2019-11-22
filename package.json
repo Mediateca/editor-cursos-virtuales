@@ -24,7 +24,7 @@
     "firebase": "^6.1.0",
     "firebase-tools": "^6.11.0",
     "jquery": "^3.4.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "ng2-dragula": "^2.1.1",
     "ngx-file-drop": "^8.0.2",
     "ngx-quill": "^5.2.0",
